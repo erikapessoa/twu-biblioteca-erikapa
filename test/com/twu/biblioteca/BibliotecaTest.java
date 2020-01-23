@@ -21,4 +21,14 @@ public class BibliotecaTest {
 
         assertEquals(allBooks, biblioteca.listAllBooks());
     }
+
+    @Test
+    public void bibliotecaListAllBooksWithAuthorAndYear(){
+        String allBooks = "Book1 | Author 1 | Year 1 \n" +
+                "Book2 | Author 2 | Year 2 \n" +
+                "Book3 | Author 3 | Year 3 \n" +
+                "Book4 | Author 4 | Year 4 ";
+
+        assertEquals(allBooks, biblioteca.listAllBooksWithAuthorAndYear());
+    }
 }
