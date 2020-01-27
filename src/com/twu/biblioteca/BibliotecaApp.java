@@ -14,7 +14,18 @@ public class BibliotecaApp {
         return "Welcome to Biblioteca. Your one-stop-shop for great books titles in Bangalore!";
     }
 
-    public String listAllBooks() {
+    public List<Book> listAllBooks() {
+        List<Book> books = new ArrayList<>();
+
+        books.add(new Book("Book1", "Author 1", Year.now()));
+        books.add(new Book("Book2", "Author 2", Year.now()));
+        books.add(new Book("Book3", "Author 3", Year.now()));
+        books.add(new Book("Book4", "Author 4", Year.now()));
+
+        return books;
+    }
+
+    public String viewAllBooks() {
         String allBooks;
         List<Book> books = new ArrayList<>();
 
@@ -28,7 +39,7 @@ public class BibliotecaApp {
         return allBooks;
     }
 
-    public String listAllBooksWithAuthorAndYear() {
+    public String viewAllBooksWithAuthorAndYear() {
         List<Book> books = new ArrayList<>();
         String allBooks;
 
@@ -42,6 +53,16 @@ public class BibliotecaApp {
         return allBooks;
     }
 
+    public List<Book> listAllBooksWithAuthorAndYear() {
+        List<Book> books = new ArrayList<>();
+
+        books.add(new Book("Book1", "Author 1", Year.now()));
+        books.add(new Book("Book2", "Author 2", Year.now()));
+        books.add(new Book("Book3", "Author 3", Year.now()));
+        books.add(new Book("Book4", "Author 4", Year.now()));
+
+        return books;
+    }
 
     public static void main(String[] args) {
         BibliotecaApp biblioteca = new BibliotecaApp();
@@ -51,4 +72,9 @@ public class BibliotecaApp {
         System.out.println(biblioteca.listAllBooksWithAuthorAndYear());
     }
 
+    /*
+    public String viewMainMenu() {
+        
+    }
+     */
 }

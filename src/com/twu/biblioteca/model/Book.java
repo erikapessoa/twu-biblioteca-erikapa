@@ -3,6 +3,7 @@ package com.twu.biblioteca.model;
 import java.time.LocalDate;
 import java.time.Year;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Book {
 
@@ -30,5 +31,21 @@ public class Book {
 
     public String publicationYear() {
         return publicationYear.format(DateTimeFormatter.ofPattern("u"));
+
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Book book = (Book) o;
+        return title.equals(book.title) &&
+                author.equals(book.author) &&
+                publicationYear.equals(book.publicationYear);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(title, author, publicationYear);
     }
 }
