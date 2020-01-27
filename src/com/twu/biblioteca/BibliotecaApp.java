@@ -9,30 +9,29 @@ import java.util.List;
 public class BibliotecaApp {
 
 
+    private List<Book> books = new ArrayList<>();
+
     public String welcomeMessage() {
 
         return "Welcome to Biblioteca. Your one-stop-shop for great books titles in Bangalore!";
     }
 
-    public List<Book> listAllBooks() {
-        List<Book> books = new ArrayList<>();
+    public void initializeBiblioteca() {
+
+        books = new ArrayList<>();
 
         books.add(new Book("Book1", "Author 1", Year.now()));
         books.add(new Book("Book2", "Author 2", Year.now()));
         books.add(new Book("Book3", "Author 3", Year.now()));
         books.add(new Book("Book4", "Author 4", Year.now()));
+    }
 
+    public List<Book> listAllBooks() {
         return books;
     }
 
     public String viewAllBooks() {
         String allBooks;
-        List<Book> books = new ArrayList<>();
-
-        books.add(new Book("Book1", "Author 1", Year.now()));
-        books.add(new Book("Book2", "Author 2", Year.now()));
-        books.add(new Book("Book3", "Author 3", Year.now()));
-        books.add(new Book("Book4", "Author 4", Year.now()));
 
         allBooks = Util.formatBookListTitles(books);
 
@@ -40,28 +39,11 @@ public class BibliotecaApp {
     }
 
     public String viewAllBooksWithAuthorAndYear() {
-        List<Book> books = new ArrayList<>();
         String allBooks;
-
-        books.add(new Book("Book1", "Author 1", Year.now()));
-        books.add(new Book("Book2", "Author 2", Year.now()));
-        books.add(new Book("Book3", "Author 3", Year.now()));
-        books.add(new Book("Book4", "Author 4", Year.now()));
 
         allBooks = Util.formatBookListWithAuthorAndYear(books);
 
         return allBooks;
-    }
-
-    public List<Book> listAllBooksWithAuthorAndYear() {
-        List<Book> books = new ArrayList<>();
-
-        books.add(new Book("Book1", "Author 1", Year.now()));
-        books.add(new Book("Book2", "Author 2", Year.now()));
-        books.add(new Book("Book3", "Author 3", Year.now()));
-        books.add(new Book("Book4", "Author 4", Year.now()));
-
-        return books;
     }
 
     public static void main(String[] args) {
@@ -69,7 +51,16 @@ public class BibliotecaApp {
 
         System.out.println("BIBLIOTECA BANGALORE");
         System.out.println(biblioteca.welcomeMessage());
-        System.out.println(biblioteca.listAllBooksWithAuthorAndYear());
+        System.out.println(biblioteca.viewAllBooksWithAuthorAndYear());
+    }
+
+    public String viewMainMenu() {
+
+        return "Menu: choose an option: \n (1) List of Books\n";
+    }
+
+    public List<Book> menuChoice(String userInput) {
+        return listAllBooks();
     }
 
     /*

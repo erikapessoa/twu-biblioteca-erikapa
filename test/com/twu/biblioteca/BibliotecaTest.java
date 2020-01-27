@@ -1,6 +1,7 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.model.Book;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.time.Year;
@@ -12,6 +13,20 @@ import static org.junit.Assert.assertEquals;
 public class BibliotecaTest {
 
     private BibliotecaApp biblioteca = new BibliotecaApp();
+    private  List<Book> expectedBooks;
+
+    @Before
+    public void initialize() {
+        biblioteca.initializeBiblioteca();
+
+        expectedBooks = new ArrayList<>();
+
+        expectedBooks.add(new Book("Book1", "Author 1", Year.now()));
+        expectedBooks.add(new Book("Book2", "Author 2", Year.now()));
+        expectedBooks.add(new Book("Book3", "Author 3", Year.now()));
+        expectedBooks.add(new Book("Book4", "Author 4", Year.now()));
+
+    }
 
     @Test
     public void welcomeMessage() {
@@ -23,16 +38,10 @@ public class BibliotecaTest {
     @Test
     public void listAllBooks(){
         String allBooks;
-        List<Book> books = new ArrayList<>();
 
-        books.add(new Book("Book1", "Author 1", Year.now()));
-        books.add(new Book("Book2", "Author 2", Year.now()));
-        books.add(new Book("Book3", "Author 3", Year.now()));
-        books.add(new Book("Book4", "Author 4", Year.now()));
+        assertEquals(expectedBooks, biblioteca.listAllBooks());
 
-        assertEquals(books, biblioteca.listAllBooks());
-
-        allBooks = Util.formatBookListTitles(books);
+        allBooks = Util.formatBookListTitles(expectedBooks);
 
         assertEquals(allBooks, biblioteca.viewAllBooks());
     }
@@ -40,31 +49,25 @@ public class BibliotecaTest {
     @Test
     public void listAllBooksWithAuthorAndYear(){
         String allBooks;
-        List<Book> books = new ArrayList<>();
 
-        books.add(new Book("Book1", "Author 1", Year.now()));
-        books.add(new Book("Book2", "Author 2", Year.now()));
-        books.add(new Book("Book3", "Author 3", Year.now()));
-        books.add(new Book("Book4", "Author 4", Year.now()));
+        assertEquals(expectedBooks, biblioteca.listAllBooks());
 
-        assertEquals(books, biblioteca.listAllBooksWithAuthorAndYear());
-
-        allBooks = Util.formatBookListWithAuthorAndYear(books);
+        allBooks = Util.formatBookListWithAuthorAndYear(expectedBooks);
 
         assertEquals(allBooks, biblioteca.viewAllBooksWithAuthorAndYear());
     }
 
-    /*
+
     @Test
     public void viewMainMenu() {
-        String menuText = "Menu: choose an option: \n";
-        String menuOptions = "(1) List of Books\n";
+        String menuText = "Menu: choose an option: \n (1) List of Books\n";
 
-        String bibliotecaMainMenu = menuText + menuOptions;
+        assertEquals(menuText, biblioteca.viewMainMenu());
 
-        assertEquals(bibliotecaMainMenu, biblioteca.viewMainMenu());
+        String userInput = "1";
+
+        assertEquals(expectedBooks, biblioteca.menuChoice(userInput));
+
     }
-
-     */
 
 }
