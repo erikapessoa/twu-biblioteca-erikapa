@@ -1,5 +1,8 @@
 package com.twu.biblioteca;
 
+import com.twu.biblioteca.model.Book;
+
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,29 +15,29 @@ public class BibliotecaApp {
     }
 
     public String listAllBooks() {
-        List<String> books = new ArrayList<>();
         String allBooks;
+        List<Book> books = new ArrayList<>();
 
-        books.add("Book1");
-        books.add("Book2");
-        books.add("Book3");
-        books.add("Book4");
+        books.add(new Book("Book1", "Author 1", Year.now()));
+        books.add(new Book("Book2", "Author 2", Year.now()));
+        books.add(new Book("Book3", "Author 3", Year.now()));
+        books.add(new Book("Book4", "Author 4", Year.now()));
 
-        allBooks = String.join("\n", books);
+        allBooks = Util.formatBookListTitles(books);
 
         return allBooks;
     }
 
     public String listAllBooksWithAuthorAndYear() {
-        List<String> books = new ArrayList<>();
+        List<Book> books = new ArrayList<>();
         String allBooks;
 
-        books.add("Book1 | Author 1 | Year 1 ");
-        books.add("Book2 | Author 2 | Year 2 ");
-        books.add("Book3 | Author 3 | Year 3 ");
-        books.add("Book4 | Author 4 | Year 4 ");
+        books.add(new Book("Book1", "Author 1", Year.now()));
+        books.add(new Book("Book2", "Author 2", Year.now()));
+        books.add(new Book("Book3", "Author 3", Year.now()));
+        books.add(new Book("Book4", "Author 4", Year.now()));
 
-        allBooks = String.join("\n", books);
+        allBooks = Util.formatBookListWithAuthorAndYear(books);
 
         return allBooks;
     }

@@ -1,6 +1,11 @@
 package com.twu.biblioteca;
 
+import com.twu.biblioteca.model.Book;
 import org.junit.Test;
+
+import java.time.Year;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -17,18 +22,32 @@ public class BibliotecaTest {
 
     @Test
     public void bibliotecaListAllBooks(){
-        String allBooks = "Book1\nBook2\nBook3\nBook4";
+        String allBooks;
+        List<Book> books = new ArrayList<>();
+
+        books.add(new Book("Book1", "Author 1", Year.now()));
+        books.add(new Book("Book2", "Author 2", Year.now()));
+        books.add(new Book("Book3", "Author 3", Year.now()));
+        books.add(new Book("Book4", "Author 4", Year.now()));
+
+        allBooks = Util.formatBookListTitles(books);
 
         assertEquals(allBooks, biblioteca.listAllBooks());
     }
 
     @Test
     public void bibliotecaListAllBooksWithAuthorAndYear(){
-        String allBooks = "Book1 | Author 1 | Year 1 \n" +
-                "Book2 | Author 2 | Year 2 \n" +
-                "Book3 | Author 3 | Year 3 \n" +
-                "Book4 | Author 4 | Year 4 ";
+        String allBooks;
+        List<Book> books = new ArrayList<>();
+
+        books.add(new Book("Book1", "Author 1", Year.now()));
+        books.add(new Book("Book2", "Author 2", Year.now()));
+        books.add(new Book("Book3", "Author 3", Year.now()));
+        books.add(new Book("Book4", "Author 4", Year.now()));
+
+        allBooks = Util.formatBookListWithAuthorAndYear(books);
 
         assertEquals(allBooks, biblioteca.listAllBooksWithAuthorAndYear());
     }
+
 }
