@@ -99,6 +99,7 @@ public class BibliotecaTest {
     public void returnABook() {
         int bookId = 1;
         String returnSuccessful = "Thank you for returning the book.";
+        String returnUnsuccessful = "That is not a valid book to return.";
 
         //given - need a refactoring using mockito
         allBooks.get(0).setAvailable(false);
@@ -106,6 +107,10 @@ public class BibliotecaTest {
 
         //then
         assertEquals(returnSuccessful, biblioteca.returnABook(bookId));
+
+        bookId = 5;
+
+        assertEquals(returnUnsuccessful, biblioteca.returnABook(bookId));
 
 
 

@@ -105,13 +105,22 @@ public class BibliotecaApp {
     public String returnABook(int bookId) {
 
         String returnSuccessful = "Thank you for returning the book.";
-        Book returnedBook = findBookWithId(bookId);
+        String returnUnsuccessful =  "That is not a valid book to return.";
 
-        if(!returnedBook.isAvailable()) {
-            returnedBook.setAvailable(true);
-            return returnSuccessful;
+
+        try {
+            Book returnedBook = findBookWithId(bookId);
+
+            if(!returnedBook.isAvailable()) {
+                returnedBook.setAvailable(true);
+                return returnSuccessful;
+            } else
+                return returnUnsuccessful;
+        } catch (IllegalArgumentException e) {
+            return returnUnsuccessful;
         }
-        return "0";
+
+
     }
 
     private Book findBookWithId(int bookId) {
