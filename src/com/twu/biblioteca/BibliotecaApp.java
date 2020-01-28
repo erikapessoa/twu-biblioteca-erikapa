@@ -75,11 +75,16 @@ public class BibliotecaApp {
         return menuText;
     }
 
-    public List<Book> checkoutABook(int bookId) {
-        List<Book> availableBooks = new ArrayList<>(books);
-        if(returnBookWithId(bookId) != null)
-            availableBooks.remove(returnBookWithId(bookId));
-        return availableBooks;
+    public String checkoutABook(int bookId) {
+        String checkoutSuccessful = "Thank you! Enjoy the book.";
+        String checkoutUnsuccessful = "Sorry, that book is not available.";
+        Book choosedBook = returnBookWithId(bookId);
+
+        if(choosedBook.isAvailable()) {
+            choosedBook.setAvailable(false);
+            return checkoutSuccessful;
+        } else
+            return checkoutUnsuccessful;
     }
 
     private Book returnBookWithId(int bookId) {
@@ -88,6 +93,6 @@ public class BibliotecaApp {
             if (book.getBookId().equals(bookId))
                 return book;
         }
-        return null;
+        throw new IllegalArgumentException();
     }
 }

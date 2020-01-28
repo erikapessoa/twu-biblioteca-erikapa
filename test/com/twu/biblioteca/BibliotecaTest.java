@@ -75,10 +75,14 @@ public class BibliotecaTest {
 
     @Test
     public void checkoutABook() {
-        List<Book> availableBooks = new ArrayList<>(allBooks);
-        availableBooks.remove(1);
+        int bookId = 1;
+        String checkoutSuccessful = "Thank you! Enjoy the book.";
+        String checkoutUnsuccessful = "Sorry, that book is not available.";
 
-        assertEquals(availableBooks, biblioteca.checkoutABook(2));
+        assertEquals(checkoutSuccessful, biblioteca.checkoutABook(bookId));
+        assertEquals(checkoutUnsuccessful, biblioteca.checkoutABook(bookId));
     }
+
+
 
 }

@@ -11,6 +11,7 @@ public class Book {
     private String title;
     private String author;
     private Year publicationYear;
+    private boolean available;
 
 
     public Book(Integer bookId, String title, String author, Year publicationYear) {
@@ -18,6 +19,7 @@ public class Book {
         this.title = title;
         this.author = author;
         this.publicationYear = publicationYear;
+        available = true;
     }
 
     public Integer getBookId() {
@@ -38,6 +40,14 @@ public class Book {
 
     public String publicationYear() {
         return publicationYear.format(DateTimeFormatter.ofPattern("u"));
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
     }
 
     @Override
