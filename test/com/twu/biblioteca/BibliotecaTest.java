@@ -21,10 +21,10 @@ public class BibliotecaTest {
 
         allBooks = new ArrayList<>();
 
-        allBooks.add(new Book("Book1", "Author 1", Year.now()));
-        allBooks.add(new Book("Book2", "Author 2", Year.now()));
-        allBooks.add(new Book("Book3", "Author 3", Year.now()));
-        allBooks.add(new Book("Book4", "Author 4", Year.now()));
+        allBooks.add(new Book(1,"Book1", "Author 1", Year.now()));
+        allBooks.add(new Book(2,"Book2", "Author 2", Year.now()));
+        allBooks.add(new Book(3,"Book3", "Author 3", Year.now()));
+        allBooks.add(new Book(4,"Book4", "Author 4", Year.now()));
 
     }
 
@@ -75,11 +75,10 @@ public class BibliotecaTest {
 
     @Test
     public void checkoutABook() {
-        Integer bookId = 1;
         List<Book> availableBooks = new ArrayList<>(allBooks);
-        availableBooks.remove(0);
+        availableBooks.remove(1);
 
-        assertEquals(availableBooks, biblioteca.checkoutABook(1));
+        assertEquals(availableBooks, biblioteca.checkoutABook(2));
     }
 
 }

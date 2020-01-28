@@ -20,10 +20,10 @@ public class BibliotecaApp {
 
         books = new ArrayList<>();
 
-        books.add(new Book("Book1", "Author 1", Year.now()));
-        books.add(new Book("Book2", "Author 2", Year.now()));
-        books.add(new Book("Book3", "Author 3", Year.now()));
-        books.add(new Book("Book4", "Author 4", Year.now()));
+        books.add(new Book(1,"Book1", "Author 1", Year.now()));
+        books.add(new Book(2,"Book2", "Author 2", Year.now()));
+        books.add(new Book(3,"Book3", "Author 3", Year.now()));
+        books.add(new Book(4,"Book4", "Author 4", Year.now()));
     }
 
     public List<Book> listAllBooks() {
@@ -77,13 +77,17 @@ public class BibliotecaApp {
 
     public List<Book> checkoutABook(int bookId) {
         List<Book> availableBooks = new ArrayList<>(books);
-        availableBooks.remove(0);
+        if(returnBookWithId(bookId) != null)
+            availableBooks.remove(returnBookWithId(bookId));
         return availableBooks;
     }
 
-    /*
-    public String viewMainMenu() {
-        
+    private Book returnBookWithId(int bookId) {
+        for (Book book:
+             books) {
+            if (book.getBookId().equals(bookId))
+                return book;
+        }
+        return null;
     }
-     */
 }

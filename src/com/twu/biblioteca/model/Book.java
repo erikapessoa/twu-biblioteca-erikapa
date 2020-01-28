@@ -7,14 +7,21 @@ import java.util.Objects;
 
 public class Book {
 
+    private Integer bookId;
     private String title;
     private String author;
     private Year publicationYear;
 
-    public Book(String title, String author, Year publicationYear) {
+
+    public Book(Integer bookId, String title, String author, Year publicationYear) {
+        this.bookId = bookId;
         this.title = title;
         this.author = author;
         this.publicationYear = publicationYear;
+    }
+
+    public Integer getBookId() {
+        return bookId;
     }
 
     public String getTitle() {
@@ -31,7 +38,6 @@ public class Book {
 
     public String publicationYear() {
         return publicationYear.format(DateTimeFormatter.ofPattern("u"));
-
     }
 
     @Override
@@ -39,13 +45,14 @@ public class Book {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return title.equals(book.title) &&
+        return bookId.equals(book.bookId) &&
+                title.equals(book.title) &&
                 author.equals(book.author) &&
                 publicationYear.equals(book.publicationYear);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(title, author, publicationYear);
+        return Objects.hash(bookId, title, author, publicationYear);
     }
 }
