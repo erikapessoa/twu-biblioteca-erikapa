@@ -13,18 +13,18 @@ import static org.junit.Assert.assertEquals;
 public class BibliotecaTest {
 
     private BibliotecaApp biblioteca = new BibliotecaApp();
-    private  List<Book> expectedBooks;
+    private  List<Book> allBooks;
 
     @Before
     public void initialize() {
         biblioteca.initializeBiblioteca();
 
-        expectedBooks = new ArrayList<>();
+        allBooks = new ArrayList<>();
 
-        expectedBooks.add(new Book("Book1", "Author 1", Year.now()));
-        expectedBooks.add(new Book("Book2", "Author 2", Year.now()));
-        expectedBooks.add(new Book("Book3", "Author 3", Year.now()));
-        expectedBooks.add(new Book("Book4", "Author 4", Year.now()));
+        allBooks.add(new Book("Book1", "Author 1", Year.now()));
+        allBooks.add(new Book("Book2", "Author 2", Year.now()));
+        allBooks.add(new Book("Book3", "Author 3", Year.now()));
+        allBooks.add(new Book("Book4", "Author 4", Year.now()));
 
     }
 
@@ -39,9 +39,9 @@ public class BibliotecaTest {
     public void listAllBooks(){
         String allBooks;
 
-        assertEquals(expectedBooks, biblioteca.listAllBooks());
+        assertEquals(this.allBooks, biblioteca.listAllBooks());
 
-        allBooks = Util.formatBookListTitles(expectedBooks);
+        allBooks = Util.formatBookListTitles(this.allBooks);
 
         assertEquals(allBooks, biblioteca.viewAllBooks());
     }
@@ -50,9 +50,9 @@ public class BibliotecaTest {
     public void listAllBooksWithAuthorAndYear(){
         String allBooks;
 
-        assertEquals(expectedBooks, biblioteca.listAllBooks());
+        assertEquals(this.allBooks, biblioteca.listAllBooks());
 
-        allBooks = Util.formatBookListWithAuthorAndYear(expectedBooks);
+        allBooks = Util.formatBookListWithAuthorAndYear(this.allBooks);
 
         assertEquals(allBooks, biblioteca.viewAllBooksWithAuthorAndYear());
     }
@@ -61,13 +61,17 @@ public class BibliotecaTest {
     @Test
     public void viewMainMenu() {
         String menuText = "Menu: choose an option: \n (1) List of Books\n";
+        String invalidOption = "Please select a valid option!";
 
         assertEquals(menuText, biblioteca.viewMainMenu());
 
         String userInput = "1";
 
-        assertEquals(expectedBooks, biblioteca.menuChoice(userInput));
+        assertEquals(Util.formatBookListTitles(allBooks), biblioteca.menuChoice(userInput));
 
+        userInput = "2";
+
+        assertEquals(invalidOption, biblioteca.menuChoice(userInput));
     }
 
 }
