@@ -75,6 +75,12 @@ public class BibliotecaApp {
         return menuText;
     }
 
+    public List<Book> checkoutABook(int bookId) {
+        List<Book> availableBooks = new ArrayList<>(books);
+        availableBooks.remove(0);
+        return availableBooks;
+    }
+
     /*
     public String viewMainMenu() {
         

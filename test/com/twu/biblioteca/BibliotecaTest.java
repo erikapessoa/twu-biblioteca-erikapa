@@ -16,7 +16,7 @@ public class BibliotecaTest {
     private  List<Book> allBooks;
 
     @Before
-    public void initialize() {
+    public void initializeListOfAllBooks() {
         biblioteca.initializeBiblioteca();
 
         allBooks = new ArrayList<>();
@@ -71,6 +71,15 @@ public class BibliotecaTest {
         assertEquals(invalidOption, biblioteca.menuChoice(userInput));
         userInput = "q";
         assertEquals(exit, biblioteca.menuChoice(userInput));
+    }
+
+    @Test
+    public void checkoutABook() {
+        Integer bookId = 1;
+        List<Book> availableBooks = new ArrayList<>(allBooks);
+        availableBooks.remove(0);
+
+        assertEquals(availableBooks, biblioteca.checkoutABook(1));
     }
 
 }
