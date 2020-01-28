@@ -98,8 +98,16 @@ public class BibliotecaTest {
     @Test
     public void returnABook() {
         int bookId = 1;
+        String returnSuccessful = "Thank you for returning the book.";
 
-        assertTrue(biblioteca.returnABook(bookId));
+        //given - need a refactoring using mockito
+        allBooks.get(0).setAvailable(false);
+        biblioteca.checkoutABook(bookId);
+
+        //then
+        assertEquals(returnSuccessful, biblioteca.returnABook(bookId));
+
+
 
     }
 

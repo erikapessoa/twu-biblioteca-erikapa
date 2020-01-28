@@ -102,8 +102,16 @@ public class BibliotecaApp {
             return checkoutUnsuccessful;
     }
 
-    public boolean returnABook(int bookId) {
-        return true;
+    public String returnABook(int bookId) {
+
+        String returnSuccessful = "Thank you for returning the book.";
+        Book returnedBook = findBookWithId(bookId);
+
+        if(!returnedBook.isAvailable()) {
+            returnedBook.setAvailable(true);
+            return returnSuccessful;
+        }
+        return "0";
     }
 
     private Book findBookWithId(int bookId) {
