@@ -2,9 +2,11 @@ package com.twu.biblioteca;
 
 import com.twu.biblioteca.model.Book;
 
+import java.io.Console;
 import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class BibliotecaApp {
 
@@ -34,6 +36,7 @@ public class BibliotecaApp {
         List<Book> availableBooks = new ArrayList<>(books);
 
         availableBooks.removeIf(book -> !book.isAvailable());
+
         return availableBooks;
     }
 
@@ -79,7 +82,7 @@ public class BibliotecaApp {
 
         switch (userInput) {
             case "1":
-                menuText = viewAllBooks();
+                menuText = viewAllAvailableBooks();
                 break;
             case "q":
                 menuText = "Bye!";
@@ -87,6 +90,8 @@ public class BibliotecaApp {
             default:
                 menuText = "Please select a valid option!";
         }
+
+
         return menuText;
     }
 
@@ -107,7 +112,6 @@ public class BibliotecaApp {
         String returnSuccessful = "Thank you for returning the book.";
         String returnUnsuccessful =  "That is not a valid book to return.";
 
-
         try {
             Book returnedBook = findBookWithId(bookId);
 
@@ -119,8 +123,6 @@ public class BibliotecaApp {
         } catch (IllegalArgumentException e) {
             return returnUnsuccessful;
         }
-
-
     }
 
     private Book findBookWithId(int bookId) {
@@ -135,8 +137,13 @@ public class BibliotecaApp {
     public static void main(String[] args) {
         BibliotecaApp biblioteca = new BibliotecaApp();
 
+        biblioteca.initializeBiblioteca();
         System.out.println("BIBLIOTECA BANGALORE");
         System.out.println(biblioteca.welcomeMessage());
-        System.out.println(biblioteca.viewAllBooksWithAuthorAndYear());
+        System.out.println(biblioteca.viewMainMenu());
+        Scanner scan = new Scanner(System.in);
+        String menuOption = scan.next();
+        System.out.println(biblioteca.menuChoice(menuOption));
+
     }
 }
