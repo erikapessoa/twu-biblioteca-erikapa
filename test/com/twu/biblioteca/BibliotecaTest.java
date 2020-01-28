@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class BibliotecaTest {
 
@@ -47,14 +48,25 @@ public class BibliotecaTest {
     }
 
     @Test
+    public void listAllAvailableBooks(){
+        String allBooks;
+
+        assertEquals(this.allBooks, biblioteca.listAllAvailableBooks());
+
+        allBooks = Util.formatBookListTitles(this.allBooks);
+
+        assertEquals(allBooks, biblioteca.viewAllAvailableBooks());
+    }
+
+    @Test
     public void listAllBooksWithAuthorAndYear(){
         String allBooks;
 
-        assertEquals(this.allBooks, biblioteca.listAllBooks());
+        assertEquals(this.allBooks, biblioteca.listAllAvailableBooks());
 
         allBooks = Util.formatBookListWithAuthorAndYear(this.allBooks);
 
-        assertEquals(allBooks, biblioteca.viewAllBooksWithAuthorAndYear());
+        assertEquals(allBooks, biblioteca.viewAllAvailableBooksWithAuthorAndYear());
     }
 
 
@@ -83,6 +95,13 @@ public class BibliotecaTest {
         assertEquals(checkoutUnsuccessful, biblioteca.checkoutABook(bookId));
     }
 
+    @Test
+    public void returnABook() {
+        int bookId = 1;
+
+        assertTrue(biblioteca.returnABook(bookId));
+
+    }
 
 
 }

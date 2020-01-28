@@ -30,10 +30,25 @@ public class BibliotecaApp {
         return books;
     }
 
+    public List<Book> listAllAvailableBooks() {
+        List<Book> availableBooks = new ArrayList<>(books);
+
+        availableBooks.removeIf(book -> !book.isAvailable());
+        return availableBooks;
+    }
+
     public String viewAllBooks() {
         String allBooks;
 
         allBooks = Util.formatBookListTitles(books);
+
+        return allBooks;
+    }
+
+    public String viewAllAvailableBooks() {
+        String allBooks;
+
+        allBooks = Util.formatBookListTitles(listAllAvailableBooks());
 
         return allBooks;
     }
@@ -46,12 +61,12 @@ public class BibliotecaApp {
         return allBooks;
     }
 
-    public static void main(String[] args) {
-        BibliotecaApp biblioteca = new BibliotecaApp();
+    public String viewAllAvailableBooksWithAuthorAndYear() {
+        String allBooks;
 
-        System.out.println("BIBLIOTECA BANGALORE");
-        System.out.println(biblioteca.welcomeMessage());
-        System.out.println(biblioteca.viewAllBooksWithAuthorAndYear());
+        allBooks = Util.formatBookListWithAuthorAndYear(listAllAvailableBooks());
+
+        return allBooks;
     }
 
     public String viewMainMenu() {
@@ -78,7 +93,7 @@ public class BibliotecaApp {
     public String checkoutABook(int bookId) {
         String checkoutSuccessful = "Thank you! Enjoy the book.";
         String checkoutUnsuccessful = "Sorry, that book is not available.";
-        Book choosedBook = returnBookWithId(bookId);
+        Book choosedBook = findBookWithId(bookId);
 
         if(choosedBook.isAvailable()) {
             choosedBook.setAvailable(false);
@@ -87,12 +102,24 @@ public class BibliotecaApp {
             return checkoutUnsuccessful;
     }
 
-    private Book returnBookWithId(int bookId) {
+    public boolean returnABook(int bookId) {
+        return true;
+    }
+
+    private Book findBookWithId(int bookId) {
         for (Book book:
              books) {
             if (book.getBookId().equals(bookId))
                 return book;
         }
         throw new IllegalArgumentException();
+    }
+
+    public static void main(String[] args) {
+        BibliotecaApp biblioteca = new BibliotecaApp();
+
+        System.out.println("BIBLIOTECA BANGALORE");
+        System.out.println(biblioteca.welcomeMessage());
+        System.out.println(biblioteca.viewAllBooksWithAuthorAndYear());
     }
 }
