@@ -56,14 +56,23 @@ public class BibliotecaApp {
 
     public String viewMainMenu() {
 
-        return "Menu: choose an option: \n (1) List of Books\n";
+        return "Menu: choose an option: \n (1) List of Books\n (q) Quit";
     }
 
     public String menuChoice(String userInput) {
-        if(userInput.equals("1"))
-            return viewAllBooks();
-        else
-            return "Please select a valid option!";
+        String menuText;
+
+        switch (userInput) {
+            case "1":
+                menuText = viewAllBooks();
+                break;
+            case "q":
+                menuText = "Bye!";
+                break;
+            default:
+                menuText = "Please select a valid option!";
+        }
+        return menuText;
     }
 
     /*
