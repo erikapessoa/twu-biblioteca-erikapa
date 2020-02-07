@@ -1,7 +1,11 @@
 package com.twu.biblioteca.controller;
 
+import com.twu.biblioteca.exceptions.BookUnavailableException;
+import com.twu.biblioteca.model.Book;
 import com.twu.biblioteca.util.Util;
 import com.twu.biblioteca.dao.Catalog;
+
+import java.util.List;
 
 public class Biblioteca {
     private Catalog catalog;
@@ -47,4 +51,13 @@ public class Biblioteca {
         return  optionResult;
     }
 
+    public List<Book> chekoutABook(int bookId) {
+        try {
+            catalog.checkoutBook(bookId);
+
+        } catch (BookUnavailableException e) {
+            e.printStackTrace();
+        }
+        return catalog.listAllAvailableBooks();
+    }
 }

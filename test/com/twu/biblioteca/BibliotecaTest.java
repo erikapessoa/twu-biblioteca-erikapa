@@ -2,13 +2,15 @@ package com.twu.biblioteca;
 
 import com.twu.biblioteca.controller.Biblioteca;
 import com.twu.biblioteca.dao.Catalog;
+import com.twu.biblioteca.exceptions.BookUnavailableException;
 import com.twu.biblioteca.model.Book;
 import org.junit.Test;
 
+import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -74,7 +76,7 @@ public class BibliotecaTest {
     public void chooseInvalidMenuOption() {
         //Given
         String expected = "Please select a valid option!";
-        Catalog catalog = new Catalog();
+        Catalog catalog = mock(Catalog.class);
         Biblioteca bib = new Biblioteca(catalog);
         //when
         String actual = bib.chooseMenuOption("-1000");
@@ -86,11 +88,28 @@ public class BibliotecaTest {
     public void chooseCloseApplication() {
         //Given
         String expected = "Bye";
-        Catalog catalog = new Catalog();
+        Catalog catalog = mock(Catalog.class);
         Biblioteca bib = new Biblioteca(catalog);
         //when
         String actual = bib.chooseMenuOption("q");
         //then
         assertEquals(expected, actual);
+    }
+
+    @Test
+    public void checkoutABook() {
+        //Given
+        List<Book> expectedAvailableBooks = new ArrayList<>();
+        expectedAvailableBooks.add(new Book(1,"Book1", "Author 1", Year.now()));
+        expectedAvailableBooks.add(new Book(2,"Book2", "Author 2", Year.now()));
+        expectedAvailableBooks.get(1).setAvailable(false);
+        Catalog mockCatalog = mock(Catalog.class);
+        Biblioteca bib = new Biblioteca(mockCatalog);
+
+        //when
+        when(mockCatalog.listAllAvailableBooks()).thenReturn(expectedAvailableBooks);
+
+        //then
+        assertEquals(expectedAvailableBooks, bib.chekoutABook(2));
     }
 }
