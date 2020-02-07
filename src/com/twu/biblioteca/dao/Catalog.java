@@ -1,17 +1,15 @@
 package com.twu.biblioteca.dao;
 
+import com.twu.biblioteca.exceptions.NotValidBookToReturnException;
 import com.twu.biblioteca.exceptions.BookUnavailableException;
 import com.twu.biblioteca.model.Book;
 
-import java.time.Year;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Catalog {
 
     private List<Book> mBooks;
-
-
 
     public Catalog(List<Book> books)  {
         mBooks = new ArrayList<>(books);
@@ -28,14 +26,26 @@ public class Catalog {
     }
 
     public void checkoutBook(int bookId) throws BookUnavailableException {
-        Book choosedBook = findBookById(bookId);
         try {
+            Book choosedBook = findBookById(bookId);
             if(choosedBook.isAvailable())
                 lockBook(bookId);
             else
                 throw new BookUnavailableException();
         } catch (IllegalArgumentException e) {
             throw new BookUnavailableException();
+        }
+    }
+
+    public void returnBook(int bookId) throws NotValidBookToReturnException {
+        try {
+            Book choosedBook = findBookById(bookId);
+            if(!choosedBook.isAvailable())
+                unlockBook(bookId);
+            else
+                throw new NotValidBookToReturnException();
+        } catch (IllegalArgumentException e) {
+            throw new NotValidBookToReturnException();
         }
     }
 

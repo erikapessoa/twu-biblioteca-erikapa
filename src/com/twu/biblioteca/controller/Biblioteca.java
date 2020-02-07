@@ -1,6 +1,7 @@
 package com.twu.biblioteca.controller;
 
 import com.twu.biblioteca.exceptions.BookUnavailableException;
+import com.twu.biblioteca.exceptions.NotValidBookToReturnException;
 import com.twu.biblioteca.model.Book;
 import com.twu.biblioteca.util.Util;
 import com.twu.biblioteca.dao.Catalog;
@@ -26,12 +27,16 @@ public class Biblioteca {
         return Util.formatBookListTitles(catalog.listAllBooks());
     }
 
+    public String showAvailableBooksWithId() {
+        return Util.formatBookListWithTitleAndId(catalog.listAllAvailableBooks());
+    }
+
     public String showAllBooksWithAuthorAndYear() {
         return Util.formatBookListWithAuthorAndYear(catalog.listAllBooks());
     }
 
     public static String showMainMenu() {
-        return "(1) List of Books";
+        return "(1) List of Books\n(2) Checkout a book\n(3) Return a book\n(q) Exit";
     }
 
     public String chooseMenuOption(String userChoice) {
@@ -39,10 +44,16 @@ public class Biblioteca {
 
         switch (userChoice) {
             case "1":
-                optionResult = this.showAllBooks();
+                optionResult = this.showAvailableBooksWithId();
                 break;
             case "q":
                 optionResult = this.exit();
+                break;
+            case "2":
+                optionResult = "Write the id from the book you like to checkout: ";
+                break;
+            case "3":
+                optionResult = "Write the id from the book you like to return: ";
                 break;
             default:
                 optionResult = "Please select a valid option!";
@@ -51,13 +62,25 @@ public class Biblioteca {
         return  optionResult;
     }
 
-    public List<Book> chekoutABook(int bookId) {
+    public String chekoutABook(int bookId) {
+        String msg = "Thank you! Enjoy the book.";
         try {
             catalog.checkoutBook(bookId);
-
+            return msg;
         } catch (BookUnavailableException e) {
-            e.printStackTrace();
+            msg = e.getMessage();
+            return msg;
         }
-        return catalog.listAllAvailableBooks();
+    }
+
+    public String returnABook(int bookId) {
+        String msg = "Thank you for returning the book.";
+        try {
+            catalog.returnBook(bookId);
+            return msg;
+        } catch (NotValidBookToReturnException e) {
+            msg = e.getMessage();
+            return msg;
+        }
     }
 }

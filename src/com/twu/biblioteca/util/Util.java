@@ -27,4 +27,18 @@ public class Util {
 
         return allBooks.toString();
     }
+
+    public static String formatBookListWithTitleAndId(List<Book> books ) {
+        StringBuilder allBooks = new StringBuilder();
+
+        for (Book book: books
+        ) {
+            allBooks.append("(").
+                    append(book.getBookId()).
+                    append(") ").
+                    append(book.getTitle()).
+                    append("\n");
+        }
+        return allBooks.toString();
+    }
 }

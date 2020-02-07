@@ -65,7 +65,7 @@ public class BibliotecaTest {
     @Test
     public void showMainMenu() {
         //Given
-        String expected = "(1) List of Books";
+        String expected = "(1) List of Books\n(2) Checkout a book\n(3) Return a book\n(q) Exit";
         //when
         String actual = Biblioteca.showMainMenu();
         //then
@@ -99,17 +99,74 @@ public class BibliotecaTest {
     @Test
     public void checkoutABook() {
         //Given
-        List<Book> expectedAvailableBooks = new ArrayList<>();
-        expectedAvailableBooks.add(new Book(1,"Book1", "Author 1", Year.now()));
-        expectedAvailableBooks.add(new Book(2,"Book2", "Author 2", Year.now()));
-        expectedAvailableBooks.get(1).setAvailable(false);
-        Catalog mockCatalog = mock(Catalog.class);
-        Biblioteca bib = new Biblioteca(mockCatalog);
+        List<Book> books = new ArrayList<>();
+        books.add(new Book(1,"Book1", "Author 1", Year.now()));
+        books.add(new Book(2,"Book2", "Author 2", Year.now()));
+        Catalog catalog = new Catalog(books);
+        Biblioteca bib = new Biblioteca(catalog);
+        String msgSucessfulCheckout = "Thank you! Enjoy the book.";
 
         //when
-        when(mockCatalog.listAllAvailableBooks()).thenReturn(expectedAvailableBooks);
+        String actual = bib.chekoutABook(2);
 
         //then
-        assertEquals(expectedAvailableBooks, bib.chekoutABook(2));
+        assertEquals(msgSucessfulCheckout, actual);
+    }
+
+    @Test
+    public void checkoutABookUnsuccessful() {
+        //Given
+        List<Book> books = new ArrayList<>();
+        books.add(new Book(1,"Book1", "Author 1", Year.now()));
+        books.add(new Book(2,"Book2", "Author 2", Year.now()));
+        books.get(1).setAvailable(false);
+        Catalog catalog = new Catalog(books);
+        Biblioteca bib = new Biblioteca(catalog);
+        String msgUnsucessfullChekout = "Sorry, that book is not available";
+
+        //when
+        String actual = bib.chekoutABook(2);
+
+        //then
+        assertEquals(msgUnsucessfullChekout, actual);
+    }
+
+    @Test
+    public void returnABook() {
+        //Given
+        List<Book> books = new ArrayList<>();
+        books.add(new Book(1,"Book1", "Author 1", Year.now()));
+        books.add(new Book(2,"Book2", "Author 2", Year.now()));
+        books.get(1).setAvailable(false);
+        Catalog catalog = new Catalog(books);
+        Biblioteca bib = new Biblioteca(catalog);
+        String msgSucessfulReturn = "Thank you for returning the book.";
+
+        //when
+        String actual = bib.returnABook(2);
+
+        //then
+        assertEquals(msgSucessfulReturn, actual);
+    }
+
+    @Test
+    public void returnABookUnsuccessful() {
+        //Given
+        List<Book> books = new ArrayList<>();
+        books.add(new Book(1,"Book1", "Author 1", Year.now()));
+        books.add(new Book(2,"Book2", "Author 2", Year.now()));
+        Catalog catalog = new Catalog(books);
+        Biblioteca bib = new Biblioteca(catalog);
+        String msgUnsucessfullReturn = "That is not a valid book to return.";
+
+        //when
+        String actual = bib.returnABook(2);
+        //then
+        assertEquals(msgUnsucessfullReturn, actual);
+        //when
+        actual = bib.returnABook(3);
+        //then
+        assertEquals(msgUnsucessfullReturn, actual);
+
     }
 }

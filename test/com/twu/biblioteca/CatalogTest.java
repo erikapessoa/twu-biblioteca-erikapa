@@ -1,6 +1,7 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.dao.Catalog;
+import com.twu.biblioteca.exceptions.NotValidBookToReturnException;
 import com.twu.biblioteca.exceptions.BookUnavailableException;
 import com.twu.biblioteca.model.Book;
 import org.junit.Test;
@@ -87,11 +88,23 @@ public class CatalogTest {
         //then
         assertFalse(libraryCatalog.listAllBooks().get(1).isAvailable());
     }
+
+    @Test
+    public void returnBook() {
+        //Given
+        List<Book> expectedAvailableBooks = new ArrayList<>();
+        expectedAvailableBooks.add(new Book(1,"Book1", "Author 1", Year.now()));
+        expectedAvailableBooks.add(new Book(2,"Book2", "Author 2", Year.now()));
+        expectedAvailableBooks.get(1).setAvailable(false);
+        Catalog libraryCatalog = new Catalog(expectedAvailableBooks);
+
+        //when
+        try {
+            libraryCatalog.returnBook(2);
+        } catch (NotValidBookToReturnException e) {
+            assertFalse(libraryCatalog.listAllBooks().get(1).isAvailable());
+        }
+        //then
+        assertTrue(libraryCatalog.listAllBooks().get(1).isAvailable());
+    }
 }
-    /*
-        mBooks = new ArrayList<>();
-        mBooks.add(new Book(1,"Book1", "Author 1", Year.now()));
-        mBooks.add(new Book(2,"Book2", "Author 2", Year.now()));
-        mBooks.add(new Book(3,"Book3", "Author 3", Year.now()));
-        mBooks.add(new Book(4,"Book4", "Author 4", Year.now()));
-    */
