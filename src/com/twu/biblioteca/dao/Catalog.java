@@ -3,6 +3,7 @@ package com.twu.biblioteca.dao;
 import com.twu.biblioteca.exceptions.NotValidBookToReturnException;
 import com.twu.biblioteca.exceptions.BookUnavailableException;
 import com.twu.biblioteca.model.Book;
+import com.twu.biblioteca.model.Movie;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,9 +11,11 @@ import java.util.List;
 public class Catalog {
 
     private List<Book> mBooks;
+    private List<Movie> mMovies;
 
-    public Catalog(List<Book> books)  {
+    public Catalog(List<Book> books, List<Movie> movies)  {
         mBooks = new ArrayList<>(books);
+        mMovies = new ArrayList<>(movies);
     }
 
     public List<Book> listAllBooks() {
@@ -73,5 +76,11 @@ public class Catalog {
                 return;
             }
         }
+    }
+
+    public List<Movie> listAllAvailableMovies() {
+        List<Movie> availableMovies = new ArrayList<>(mMovies);
+        availableMovies.removeIf(movie -> !movie.isAvailable());
+        return availableMovies;
     }
 }

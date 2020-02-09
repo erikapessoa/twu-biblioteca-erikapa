@@ -3,6 +3,7 @@ package com.twu.biblioteca;
 import com.twu.biblioteca.controller.Biblioteca;
 import com.twu.biblioteca.dao.Catalog;
 import com.twu.biblioteca.model.Book;
+import com.twu.biblioteca.model.Movie;
 
 import java.time.Year;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class BibliotecaApp {
         books.add(new Book(2,"Book2", "Author 2", Year.now()));
         books.add(new Book(3,"Book3", "Author 3", Year.now()));
         books.add(new Book(4,"Book4", "Author 4", Year.now()));
-        Catalog catalog = new Catalog(books);
+        Catalog catalog = new Catalog(books, new ArrayList<>());
         Biblioteca bibApp = new Biblioteca(catalog);
 
         System.out.println("BIBLIOTECA BANGALORE");

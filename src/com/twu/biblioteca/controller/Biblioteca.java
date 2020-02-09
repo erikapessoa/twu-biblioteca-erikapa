@@ -83,4 +83,8 @@ public class Biblioteca {
             return msg;
         }
     }
+
+    public String showAvailableMoviesWithId() {
+        return Util.formatMovieListWithTitleAndId(catalog.listAllAvailableMovies());
+    }
 }

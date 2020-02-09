@@ -1,6 +1,7 @@
 package com.twu.biblioteca.util;
 
 import com.twu.biblioteca.model.Book;
+import com.twu.biblioteca.model.Movie;
 
 import java.util.List;
 
@@ -40,5 +41,19 @@ public class Util {
                     append("\n");
         }
         return allBooks.toString();
+    }
+
+    public static String formatMovieListWithTitleAndId(List<Movie> movies ) {
+        StringBuilder allMovies = new StringBuilder();
+
+        for (Movie movie: movies
+        ) {
+            allMovies.append("(").
+                    append(movie.getMovieId()).
+                    append(") ").
+                    append(movie.getTitle()).
+                    append("\n");
+        }
+        return allMovies.toString();
     }
 }

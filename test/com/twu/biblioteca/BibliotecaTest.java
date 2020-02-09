@@ -4,6 +4,7 @@ import com.twu.biblioteca.controller.Biblioteca;
 import com.twu.biblioteca.dao.Catalog;
 import com.twu.biblioteca.exceptions.BookUnavailableException;
 import com.twu.biblioteca.model.Book;
+import com.twu.biblioteca.model.Movie;
 import org.junit.Test;
 
 import java.time.Year;
@@ -63,6 +64,26 @@ public class BibliotecaTest {
     }
 
     @Test
+    public void showAvailableBooksWithId() {
+        //Given
+        String expectedBooks = "(1) Book 1\n";
+        Catalog catalogMock = mock(Catalog.class);
+        Biblioteca bib = new Biblioteca(catalogMock);
+        Book book1 = mock(Book.class);
+        List<Book> books = new ArrayList<>();
+        books.add(book1);
+
+        //when
+        when(book1.getBookId()).thenReturn(1);
+        when(book1.getTitle()).thenReturn("Book 1");
+        when(book1.isAvailable()).thenReturn(true);
+        when(catalogMock.listAllAvailableBooks()).thenReturn(books);
+
+        //then
+        assertEquals(expectedBooks, bib.showAvailableBooksWithId());
+    }
+
+    @Test
     public void showMainMenu() {
         //Given
         String expected = "(1) List of Books\n(2) Checkout a book\n(3) Return a book\n(q) Exit";
@@ -102,7 +123,7 @@ public class BibliotecaTest {
         List<Book> books = new ArrayList<>();
         books.add(new Book(1,"Book1", "Author 1", Year.now()));
         books.add(new Book(2,"Book2", "Author 2", Year.now()));
-        Catalog catalog = new Catalog(books);
+        Catalog catalog = new Catalog(books, new ArrayList<>());
         Biblioteca bib = new Biblioteca(catalog);
         String msgSucessfulCheckout = "Thank you! Enjoy the book.";
 
@@ -120,7 +141,7 @@ public class BibliotecaTest {
         books.add(new Book(1,"Book1", "Author 1", Year.now()));
         books.add(new Book(2,"Book2", "Author 2", Year.now()));
         books.get(1).setAvailable(false);
-        Catalog catalog = new Catalog(books);
+        Catalog catalog = new Catalog(books, new ArrayList<>());
         Biblioteca bib = new Biblioteca(catalog);
         String msgUnsucessfullChekout = "Sorry, that book is not available";
 
@@ -138,7 +159,7 @@ public class BibliotecaTest {
         books.add(new Book(1,"Book1", "Author 1", Year.now()));
         books.add(new Book(2,"Book2", "Author 2", Year.now()));
         books.get(1).setAvailable(false);
-        Catalog catalog = new Catalog(books);
+        Catalog catalog = new Catalog(books, new ArrayList<>());
         Biblioteca bib = new Biblioteca(catalog);
         String msgSucessfulReturn = "Thank you for returning the book.";
 
@@ -155,7 +176,7 @@ public class BibliotecaTest {
         List<Book> books = new ArrayList<>();
         books.add(new Book(1,"Book1", "Author 1", Year.now()));
         books.add(new Book(2,"Book2", "Author 2", Year.now()));
-        Catalog catalog = new Catalog(books);
+        Catalog catalog = new Catalog(books, new ArrayList<>());
         Biblioteca bib = new Biblioteca(catalog);
         String msgUnsucessfullReturn = "That is not a valid book to return.";
 
@@ -168,5 +189,25 @@ public class BibliotecaTest {
         //then
         assertEquals(msgUnsucessfullReturn, actual);
 
+    }
+
+    @Test
+    public void showAvailableMoviesWithId() {
+        //Given
+        String expectedMovies = "(1) Movie 1\n";
+        Catalog catalogMock = mock(Catalog.class);
+        Biblioteca bib = new Biblioteca(catalogMock);
+        Movie movie1 = mock(Movie.class);
+        List<Movie> movies = new ArrayList<>();
+        movies.add(movie1);
+
+        //when
+        when(movie1.getMovieId()).thenReturn(1);
+        when(movie1.getTitle()).thenReturn("Movie 1");
+        when(movie1.isAvailable()).thenReturn(true);
+        when(catalogMock.listAllAvailableMovies()).thenReturn(movies);
+
+        //then
+        assertEquals(expectedMovies, bib.showAvailableMoviesWithId());
     }
 }
