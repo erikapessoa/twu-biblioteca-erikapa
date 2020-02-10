@@ -2,11 +2,9 @@ package com.twu.biblioteca;
 
 import com.twu.biblioteca.controller.Biblioteca;
 import com.twu.biblioteca.dao.Catalog;
-import com.twu.biblioteca.exceptions.BookUnavailableException;
-import com.twu.biblioteca.model.Book;
-import com.twu.biblioteca.model.Movie;
-import com.twu.biblioteca.model.Rate;
+import com.twu.biblioteca.model.*;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.time.Year;
 import java.util.ArrayList;
@@ -38,7 +36,7 @@ public class BibliotecaTest {
 
         //when
         when(book1.getTitle()).thenReturn("Book 1");
-        when(catalogMock.listAllBooks()).thenReturn(books);
+        Mockito.<List<? extends Item>>when(catalogMock.listAll(ItemType.BOOK)).thenReturn(books);
 
         //then
         assertEquals(expectedBooks, bib.showAllBooks());
@@ -51,14 +49,14 @@ public class BibliotecaTest {
         Catalog catalogMock = mock(Catalog.class);
         Biblioteca bib = new Biblioteca(catalogMock);
         Book book1 = mock(Book.class);
-        List<Book> books = new ArrayList<>();
+        List<Item> books = new ArrayList<>();
         books.add(book1);
 
         //when
         when(book1.getTitle()).thenReturn("Book 1");
         when(book1.getAuthor()).thenReturn("Author 1");
         when(book1.publicationYear()).thenReturn("2015");
-        when(catalogMock.listAllBooks()).thenReturn(books);
+        Mockito.<List<? extends Item>>when(catalogMock.listAll(ItemType.BOOK)).thenReturn(books);
 
         //then
         assertEquals(expectedBooks, bib.showAllBooksWithAuthorAndYear());
@@ -78,7 +76,7 @@ public class BibliotecaTest {
         when(book1.getBookId()).thenReturn(1);
         when(book1.getTitle()).thenReturn("Book 1");
         when(book1.isAvailable()).thenReturn(true);
-        when(catalogMock.listAllAvailableBooks()).thenReturn(books);
+        Mockito.<List<? extends Item>>when(catalogMock.listAllAvailable(ItemType.BOOK)).thenReturn(books);
 
         //then
         assertEquals(expectedBooks, bib.showAvailableBooksWithId());
@@ -206,7 +204,7 @@ public class BibliotecaTest {
         when(movie1.getMovieId()).thenReturn(1);
         when(movie1.getTitle()).thenReturn("Movie 1");
         when(movie1.isAvailable()).thenReturn(true);
-        when(catalogMock.listAllAvailableMovies()).thenReturn(movies);
+        Mockito.<List<? extends Item>>when(catalogMock.listAllAvailable(ItemType.MOVIE)).thenReturn(movies);
 
         //then
         assertEquals(expectedMovies, bib.showAvailableMoviesWithId());

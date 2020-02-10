@@ -4,7 +4,7 @@ import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class Book {
+public class Book implements Item {
 
     private Integer bookId;
     private String title;

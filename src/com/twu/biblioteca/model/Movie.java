@@ -4,7 +4,7 @@ import java.time.Year;
 import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
-public class Movie {
+public class Movie implements Item {
     private String title;
     private String director;
     private Year publicationYear;

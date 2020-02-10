@@ -1,10 +1,9 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.dao.Catalog;
-import com.twu.biblioteca.exceptions.MovieUnavailableException;
-import com.twu.biblioteca.exceptions.NotValidBookToReturnException;
-import com.twu.biblioteca.exceptions.BookUnavailableException;
+import com.twu.biblioteca.exceptions.*;
 import com.twu.biblioteca.model.Book;
+import com.twu.biblioteca.model.ItemType;
 import com.twu.biblioteca.model.Movie;
 import com.twu.biblioteca.model.Rate;
 import org.junit.Test;
@@ -29,7 +28,7 @@ public class CatalogTest {
         Catalog libraryCatalog = new Catalog(allBooks, new ArrayList<>());
 
         //when
-        List<Book> actual = libraryCatalog.listAllBooks();
+        List<Book> actual = (List<Book>)libraryCatalog.listAll(ItemType.BOOK);
 
         //then
         assertEquals(allBooks, actual);
@@ -47,7 +46,7 @@ public class CatalogTest {
         expectedBooks.remove(0);
 
         //when
-        List<Book> actual = libraryCatalog.listAllAvailableBooks();
+        List<Book> actual = (List<Book>) libraryCatalog.listAllAvailable(ItemType.BOOK);
 
         //then
         assertEquals(expectedBooks, actual);
@@ -65,7 +64,7 @@ public class CatalogTest {
         Catalog libraryCatalog = new Catalog(allBooks, new ArrayList<>());
 
         //when
-        List<Book> actual = libraryCatalog.listAllBooks();
+        List<Book> actual = (List<Book>) libraryCatalog.listAll(ItemType.BOOK);
 
         //then
         for (Book book:
@@ -84,12 +83,12 @@ public class CatalogTest {
         Catalog libraryCatalog = new Catalog(expectedAvailableBooks, new ArrayList<>());
         //when
         try {
-            libraryCatalog.checkoutBook(2);
-        } catch (BookUnavailableException e) {
-            assertTrue(libraryCatalog.listAllBooks().get(1).isAvailable());
+            libraryCatalog.checkoutItem(ItemType.BOOK, 2);
+        } catch (ItemUnavailableException e) {
+            assertTrue(libraryCatalog.listAll(ItemType.BOOK).get(1).isAvailable());
         }
         //then
-        assertFalse(libraryCatalog.listAllBooks().get(1).isAvailable());
+        assertFalse(libraryCatalog.listAll(ItemType.BOOK).get(1).isAvailable());
     }
 
     @Test
@@ -103,12 +102,12 @@ public class CatalogTest {
 
         //when
         try {
-            libraryCatalog.returnBook(2);
-        } catch (NotValidBookToReturnException e) {
-            assertFalse(libraryCatalog.listAllBooks().get(1).isAvailable());
+            libraryCatalog.returnItem(ItemType.BOOK, 2);
+        } catch (NotValidItemToReturnException e) {
+            assertFalse(libraryCatalog.listAll(ItemType.BOOK).get(1).isAvailable());
         }
         //then
-        assertTrue(libraryCatalog.listAllBooks().get(1).isAvailable());
+        assertTrue(libraryCatalog.listAll(ItemType.BOOK).get(1).isAvailable());
     }
 
     @Test
@@ -123,7 +122,7 @@ public class CatalogTest {
         expectedMovies.remove(0);
 
         //when
-        List<Movie> actual = libraryCatalog.listAllAvailableMovies();
+        List<Movie> actual = (List<Movie>) libraryCatalog.listAllAvailable(ItemType.MOVIE);
 
         //then
         assertEquals(expectedMovies, actual);
@@ -138,11 +137,11 @@ public class CatalogTest {
         Catalog libraryCatalog = new Catalog(new ArrayList<>(), expectedAvailableMovies);
         //when
         try {
-            libraryCatalog.checkoutMovie(2);
-        } catch (MovieUnavailableException e) {
-            assertTrue(libraryCatalog.listAllMovies().get(1).isAvailable());
+            libraryCatalog.checkoutItem(ItemType.MOVIE, 2);
+        } catch (ItemUnavailableException e) {
+            assertTrue(libraryCatalog.listAll(ItemType.MOVIE).get(1).isAvailable());
         }
         //then
-        assertFalse(libraryCatalog.listAllMovies().get(1).isAvailable());
+        assertFalse(libraryCatalog.listAll(ItemType.MOVIE).get(1).isAvailable());
     }
 }

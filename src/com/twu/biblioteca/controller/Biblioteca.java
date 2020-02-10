@@ -1,13 +1,9 @@
 package com.twu.biblioteca.controller;
 
-import com.twu.biblioteca.exceptions.BookUnavailableException;
-import com.twu.biblioteca.exceptions.MovieUnavailableException;
-import com.twu.biblioteca.exceptions.NotValidBookToReturnException;
-import com.twu.biblioteca.model.Book;
+import com.twu.biblioteca.exceptions.*;
+import com.twu.biblioteca.model.ItemType;
 import com.twu.biblioteca.util.Util;
 import com.twu.biblioteca.dao.Catalog;
-
-import java.util.List;
 
 public class Biblioteca {
     private Catalog catalog;
@@ -25,15 +21,15 @@ public class Biblioteca {
     }
 
     public String showAllBooks() {
-        return Util.formatBookListTitles(catalog.listAllBooks());
+        return Util.formatBookListTitles(catalog.listAll(ItemType.BOOK));
     }
 
     public String showAvailableBooksWithId() {
-        return Util.formatBookListWithTitleAndId(catalog.listAllAvailableBooks());
+        return Util.formatBookListWithTitleAndId(catalog.listAllAvailable(ItemType.BOOK));
     }
 
     public String showAllBooksWithAuthorAndYear() {
-        return Util.formatBookListWithAuthorAndYear(catalog.listAllBooks());
+        return Util.formatBookListWithAuthorAndYear(catalog.listAll(ItemType.BOOK));
     }
 
     public static String showMainMenu() {
@@ -66,9 +62,9 @@ public class Biblioteca {
     public String chekoutABook(int bookId) {
         String msg = "Thank you! Enjoy the book.";
         try {
-            catalog.checkoutBook(bookId);
+            catalog.checkoutItem(ItemType.BOOK, bookId);
             return msg;
-        } catch (BookUnavailableException e) {
+        } catch (ItemUnavailableException e) {
             msg = e.getMessage();
             return msg;
         }
@@ -77,24 +73,24 @@ public class Biblioteca {
     public String returnABook(int bookId) {
         String msg = "Thank you for returning the book.";
         try {
-            catalog.returnBook(bookId);
+            catalog.returnItem(ItemType.BOOK, bookId);
             return msg;
-        } catch (NotValidBookToReturnException e) {
+        } catch (NotValidItemToReturnException e) {
             msg = e.getMessage();
             return msg;
         }
     }
 
     public String showAvailableMoviesWithId() {
-        return Util.formatMovieListWithTitleAndId(catalog.listAllAvailableMovies());
+        return Util.formatMovieListWithTitleAndId(catalog.listAllAvailable(ItemType.MOVIE));
     }
 
     public String chekoutAMovie(int movieId) {
         String msg = "Thank you! Enjoy the movie.";
         try {
-            catalog.checkoutMovie(movieId);
+            catalog.checkoutItem(ItemType.MOVIE, movieId);
             return msg;
-        } catch (MovieUnavailableException e) {
+        } catch (ItemUnavailableException e) {
             msg = e.getMessage();
             return msg;
         }
