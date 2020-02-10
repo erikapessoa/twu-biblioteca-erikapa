@@ -3,6 +3,8 @@ package com.twu.biblioteca;
 import com.twu.biblioteca.controller.Biblioteca;
 import com.twu.biblioteca.dao.Catalog;
 import com.twu.biblioteca.model.Book;
+import com.twu.biblioteca.model.Movie;
+import com.twu.biblioteca.model.Rate;
 
 import java.time.Year;
 import java.util.ArrayList;
@@ -17,7 +19,11 @@ public class BibliotecaApp {
         books.add(new Book(2,"Book2", "Author 2", Year.now()));
         books.add(new Book(3,"Book3", "Author 3", Year.now()));
         books.add(new Book(4,"Book4", "Author 4", Year.now()));
-        Catalog catalog = new Catalog(books, new ArrayList<>());
+        List<Movie> movies = new ArrayList<>();
+        movies.add(new Movie(1, "Movie 1", "Director 1", Year.now(), Rate.EIGHT));
+        movies.add(new Movie(2, "Movie 2", "Director 2", Year.now(), Rate.FIVE));
+        movies.add(new Movie(3, "Movie 3", "Director 3", Year.now(), Rate.SEVEN));
+        Catalog catalog = new Catalog(books, movies);
         Biblioteca bibApp = new Biblioteca(catalog);
 
         System.out.println("BIBLIOTECA BANGALORE");
@@ -26,7 +32,7 @@ public class BibliotecaApp {
 
         Scanner scan = new Scanner(System.in);
         String menuOption = scan.next();
-        String bookId;
+        String itemId;
 
         while (!menuOption.equals("q")) {
             System.out.println(bibApp.chooseMenuOption(menuOption));
@@ -34,15 +40,20 @@ public class BibliotecaApp {
             switch (menuOption) {
                 case "2":
                     scan = new Scanner(System.in);
-                    bookId = scan.next();
-                    System.out.println(bibApp.chekoutABook(Integer.parseInt(bookId)));
+                    itemId = scan.next();
+                    System.out.println(bibApp.chekoutABook(Integer.parseInt(itemId)));
                     break;
                 case "3":
                     scan = new Scanner(System.in);
-                    bookId = scan.next();
-                    System.out.println(bibApp.returnABook(Integer.parseInt(bookId)));
+                    itemId = scan.next();
+                    System.out.println(bibApp.returnABook(Integer.parseInt(itemId)));
                     break;
-                 default:
+                case "5":
+                    scan = new Scanner(System.in);
+                    itemId = scan.next();
+                    System.out.println(bibApp.chekoutAMovie(Integer.parseInt(itemId)));
+                    break;
+                default:
                      System.out.println("\n");
             }
             System.out.println("Choose an option: \n");

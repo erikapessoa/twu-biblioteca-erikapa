@@ -85,7 +85,7 @@ public class BibliotecaTest {
     @Test
     public void showMainMenu() {
         //Given
-        String expected = "(1) List of Books\n(2) Checkout a book\n(3) Return a book\n(q) Exit";
+        String expected = "(1) List of Books\n(2) Checkout a book\n(3) Return a book\n(4) List of Movies\n(5) Checkout a movie\n(q) Exit";
         //when
         String actual = Biblioteca.showMainMenu();
         //then

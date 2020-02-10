@@ -33,7 +33,7 @@ public class Biblioteca {
     }
 
     public static String showMainMenu() {
-        return "(1) List of Books\n(2) Checkout a book\n(3) Return a book\n(q) Exit";
+        return "(1) List of Books\n(2) Checkout a book\n(3) Return a book\n(4) List of Movies\n(5) Checkout a movie\n(q) Exit";
     }
 
     public String chooseMenuOption(String userChoice) {
@@ -43,14 +43,20 @@ public class Biblioteca {
             case "1":
                 optionResult = this.showAvailableBooksWithId();
                 break;
-            case "q":
-                optionResult = this.exit();
-                break;
             case "2":
                 optionResult = "Write the id from the book you like to checkout: ";
                 break;
             case "3":
                 optionResult = "Write the id from the book you like to return: ";
+                break;
+            case "4":
+                optionResult = this.showAvailableMoviesWithId();
+                break;
+            case "5":
+                optionResult = "Write the id from the movie you like to checkout: ";
+                break;
+            case "q":
+                optionResult = this.exit();
                 break;
             default:
                 optionResult = "Please select a valid option!";
