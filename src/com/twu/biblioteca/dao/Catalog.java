@@ -1,5 +1,6 @@
 package com.twu.biblioteca.dao;
 
+import com.twu.biblioteca.exceptions.MovieUnavailableException;
 import com.twu.biblioteca.exceptions.NotValidBookToReturnException;
 import com.twu.biblioteca.exceptions.BookUnavailableException;
 import com.twu.biblioteca.model.Book;
@@ -78,9 +79,41 @@ public class Catalog {
         }
     }
 
+    public List<Movie> listAllMovies () {
+        return mMovies;
+    }
     public List<Movie> listAllAvailableMovies() {
         List<Movie> availableMovies = new ArrayList<>(mMovies);
         availableMovies.removeIf(movie -> !movie.isAvailable());
         return availableMovies;
+    }
+
+    public void checkoutMovie(int movieId) throws MovieUnavailableException {
+        try {
+            Movie choosedMovie = findMovieById(movieId);
+            if(choosedMovie.isAvailable())
+                lockMovie(movieId);
+            else
+                throw new MovieUnavailableException();
+        } catch (IllegalArgumentException e) {
+            throw new MovieUnavailableException();
+        }
+    }
+
+    private Movie findMovieById(int movieId) {
+        for (Movie movie: mMovies) {
+            if (movie.getMovieId().equals(movieId))
+                return movie;
+        }
+        throw new IllegalArgumentException();
+    }
+
+    private void lockMovie(int movieId) {
+        for (Movie movie: mMovies) {
+            if (movie.getMovieId().equals(movieId)) {
+                movie.setAvailable(false);
+                return;
+            }
+        }
     }
 }

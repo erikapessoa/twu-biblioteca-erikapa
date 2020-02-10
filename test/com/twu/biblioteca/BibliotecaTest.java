@@ -5,6 +5,7 @@ import com.twu.biblioteca.dao.Catalog;
 import com.twu.biblioteca.exceptions.BookUnavailableException;
 import com.twu.biblioteca.model.Book;
 import com.twu.biblioteca.model.Movie;
+import com.twu.biblioteca.model.Rate;
 import org.junit.Test;
 
 import java.time.Year;
@@ -209,5 +210,40 @@ public class BibliotecaTest {
 
         //then
         assertEquals(expectedMovies, bib.showAvailableMoviesWithId());
+    }
+
+    @Test
+    public void checkoutAMovie() {
+        //Given
+        List<Movie> movies = new ArrayList<>();
+        movies.add(new Movie(1, "Movie 1", "Director 1", Year.now(), Rate.EIGHT));
+        movies.add(new Movie(2, "Movie 2", "Director 2", Year.now(), Rate.FIVE));
+        Catalog catalog = new Catalog(new ArrayList<>(), movies);
+        Biblioteca bib = new Biblioteca(catalog);
+        String msgSucessfulCheckout = "Thank you! Enjoy the movie.";
+
+        //when
+        String actual = bib.chekoutAMovie(2);
+
+        //then
+        assertEquals(msgSucessfulCheckout, actual);
+    }
+
+    @Test
+    public void checkoutAMovieUnsuccessful() {
+        //Given
+        List<Movie> movies = new ArrayList<>();
+        movies.add(new Movie(1, "Movie 1", "Director 1", Year.now(), Rate.EIGHT));
+        movies.add(new Movie(2, "Movie 2", "Director 2", Year.now(), Rate.FIVE));
+        movies.get(1).setAvailable(false);
+        Catalog catalog = new Catalog(new ArrayList<>(), movies);
+        Biblioteca bib = new Biblioteca(catalog);
+        String msgUnsucessfullChekout = "Sorry, that movie is not available";
+
+        //when
+        String actual = bib.chekoutAMovie(2);
+
+        //then
+        assertEquals(msgUnsucessfullChekout, actual);
     }
 }

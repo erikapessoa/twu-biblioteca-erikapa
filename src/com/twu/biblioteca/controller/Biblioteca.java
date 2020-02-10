@@ -1,6 +1,7 @@
 package com.twu.biblioteca.controller;
 
 import com.twu.biblioteca.exceptions.BookUnavailableException;
+import com.twu.biblioteca.exceptions.MovieUnavailableException;
 import com.twu.biblioteca.exceptions.NotValidBookToReturnException;
 import com.twu.biblioteca.model.Book;
 import com.twu.biblioteca.util.Util;
@@ -86,5 +87,16 @@ public class Biblioteca {
 
     public String showAvailableMoviesWithId() {
         return Util.formatMovieListWithTitleAndId(catalog.listAllAvailableMovies());
+    }
+
+    public String chekoutAMovie(int movieId) {
+        String msg = "Thank you! Enjoy the movie.";
+        try {
+            catalog.checkoutMovie(movieId);
+            return msg;
+        } catch (MovieUnavailableException e) {
+            msg = e.getMessage();
+            return msg;
+        }
     }
 }

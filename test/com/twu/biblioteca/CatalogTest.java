@@ -1,6 +1,7 @@
 package com.twu.biblioteca;
 
 import com.twu.biblioteca.dao.Catalog;
+import com.twu.biblioteca.exceptions.MovieUnavailableException;
 import com.twu.biblioteca.exceptions.NotValidBookToReturnException;
 import com.twu.biblioteca.exceptions.BookUnavailableException;
 import com.twu.biblioteca.model.Book;
@@ -126,5 +127,22 @@ public class CatalogTest {
 
         //then
         assertEquals(expectedMovies, actual);
+    }
+
+    @Test
+    public void checkoutMovie() {
+        //Given
+        List<Movie> expectedAvailableMovies = new ArrayList<>();
+        expectedAvailableMovies.add(new Movie(1, "Movie 1", "Director 1", Year.now(), Rate.EIGHT));
+        expectedAvailableMovies.add(new Movie(2, "Movie 2", "Director 2", Year.now(), Rate.FIVE));
+        Catalog libraryCatalog = new Catalog(new ArrayList<>(), expectedAvailableMovies);
+        //when
+        try {
+            libraryCatalog.checkoutMovie(2);
+        } catch (MovieUnavailableException e) {
+            assertTrue(libraryCatalog.listAllMovies().get(1).isAvailable());
+        }
+        //then
+        assertFalse(libraryCatalog.listAllMovies().get(1).isAvailable());
     }
 }
