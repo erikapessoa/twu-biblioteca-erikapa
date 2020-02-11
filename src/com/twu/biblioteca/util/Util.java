@@ -54,4 +54,13 @@ public class Util {
         }
         return allMovies.toString();
     }
+
+    public static boolean isNumeric(String text) {
+        try {
+            Integer.parseInt(text);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
 }

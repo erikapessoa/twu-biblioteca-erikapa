@@ -81,18 +81,13 @@ public class CatalogTest {
         expectedAvailableBooks.add(new Book(1,"Book1", "Author 1", Year.now()));
         expectedAvailableBooks.add(new Book(2,"Book2", "Author 2", Year.now()));
         Catalog libraryCatalog = new Catalog(expectedAvailableBooks, new ArrayList<>());
-        //when
-        try {
-            libraryCatalog.checkoutItem(ItemType.BOOK, 2);
-        } catch (ItemUnavailableException e) {
-            assertTrue(libraryCatalog.listAll(ItemType.BOOK).get(1).isAvailable());
-        }
-        //then
-        assertFalse(libraryCatalog.listAll(ItemType.BOOK).get(1).isAvailable());
+
+        //when-then
+        assertTrue(libraryCatalog.checkoutItem(ItemType.BOOK, 2));
     }
 
     @Test
-    public void returnBook() {
+    public void returnBook() throws NotValidItemToReturnException {
         //Given
         List<Book> expectedAvailableBooks = new ArrayList<>();
         expectedAvailableBooks.add(new Book(1,"Book1", "Author 1", Year.now()));
@@ -100,14 +95,19 @@ public class CatalogTest {
         expectedAvailableBooks.get(1).setAvailable(false);
         Catalog libraryCatalog = new Catalog(expectedAvailableBooks, new ArrayList<>());
 
-        //when
-        try {
-            libraryCatalog.returnItem(ItemType.BOOK, 2);
-        } catch (NotValidItemToReturnException e) {
-            assertFalse(libraryCatalog.listAll(ItemType.BOOK).get(1).isAvailable());
-        }
-        //then
-        assertTrue(libraryCatalog.listAll(ItemType.BOOK).get(1).isAvailable());
+        //when-then
+        assertTrue(libraryCatalog.returnItem(ItemType.BOOK, 2));
+    }
+
+    @Test(expected = NotValidItemToReturnException.class)
+    public void returnBook_whenExceptionThrow() throws NotValidItemToReturnException {
+        //Given
+        List<Book> expectedAvailableBooks = new ArrayList<>();
+        expectedAvailableBooks.add(new Book(1,"Book1", "Author 1", Year.now()));
+        expectedAvailableBooks.add(new Book(2,"Book2", "Author 2", Year.now()));
+        Catalog libraryCatalog = new Catalog(expectedAvailableBooks, new ArrayList<>());
+
+        libraryCatalog.returnItem(ItemType.BOOK, 3);
     }
 
     @Test
@@ -135,13 +135,8 @@ public class CatalogTest {
         expectedAvailableMovies.add(new Movie(1, "Movie 1", "Director 1", Year.now(), Rate.EIGHT));
         expectedAvailableMovies.add(new Movie(2, "Movie 2", "Director 2", Year.now(), Rate.FIVE));
         Catalog libraryCatalog = new Catalog(new ArrayList<>(), expectedAvailableMovies);
-        //when
-        try {
-            libraryCatalog.checkoutItem(ItemType.MOVIE, 2);
-        } catch (ItemUnavailableException e) {
-            assertTrue(libraryCatalog.listAll(ItemType.MOVIE).get(1).isAvailable());
-        }
-        //then
-        assertFalse(libraryCatalog.listAll(ItemType.MOVIE).get(1).isAvailable());
+
+        //when-then
+        assertTrue(libraryCatalog.checkoutItem(ItemType.MOVIE, 2));
     }
 }

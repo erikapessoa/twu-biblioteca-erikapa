@@ -1,15 +1,20 @@
 package com.twu.biblioteca.controller;
 
+import com.twu.biblioteca.dao.RegisteredUsers;
 import com.twu.biblioteca.exceptions.*;
 import com.twu.biblioteca.model.ItemType;
+import com.twu.biblioteca.model.User;
 import com.twu.biblioteca.util.Util;
 import com.twu.biblioteca.dao.Catalog;
 
 public class Biblioteca {
-    private Catalog catalog;
+    private Catalog mCatalog;
+    private RegisteredUsers mLibraryUsers;
+    private User mUserLoggedIn;
 
-    public Biblioteca(Catalog catalog) {
-        this.catalog = catalog;
+    public Biblioteca(Catalog catalog, RegisteredUsers libraryUsers) {
+        this.mCatalog = catalog;
+        this.mLibraryUsers = libraryUsers;
     }
 
     public static String welcomeMessage() {
@@ -21,19 +26,22 @@ public class Biblioteca {
     }
 
     public String showAllBooks() {
-        return Util.formatBookListTitles(catalog.listAll(ItemType.BOOK));
+        return Util.formatBookListTitles(mCatalog.listAll(ItemType.BOOK));
     }
 
     public String showAvailableBooksWithId() {
-        return Util.formatBookListWithTitleAndId(catalog.listAllAvailable(ItemType.BOOK));
+        return Util.formatBookListWithTitleAndId(mCatalog.listAllAvailable(ItemType.BOOK));
     }
 
     public String showAllBooksWithAuthorAndYear() {
-        return Util.formatBookListWithAuthorAndYear(catalog.listAll(ItemType.BOOK));
+        return Util.formatBookListWithAuthorAndYear(mCatalog.listAll(ItemType.BOOK));
     }
 
-    public static String showMainMenu() {
-        return "(1) List of Books\n(2) Checkout a book\n(3) Return a book\n(4) List of Movies\n(5) Checkout a movie\n(q) Exit";
+    public String showMainMenu() {
+        if (returnUserLoggedIn() !=null)
+            return "(1) List of Books\n(2) Checkout a book\n(3) Return a book\n(4) List of Movies\n(5) Checkout a movie\n(q) Exit";
+        else
+            return "(1) List of Books\n(4) List of Movies\n(q) Exit";
     }
 
     public String chooseMenuOption(String userChoice) {
@@ -66,20 +74,16 @@ public class Biblioteca {
     }
 
     public String chekoutABook(int bookId) {
-        String msg = "Thank you! Enjoy the book.";
-        try {
-            catalog.checkoutItem(ItemType.BOOK, bookId);
-            return msg;
-        } catch (ItemUnavailableException e) {
-            msg = e.getMessage();
-            return msg;
-        }
+        String msg = "Sorry, that book is not available.";
+        if (mCatalog.checkoutItem(ItemType.BOOK, bookId))
+            msg = "Thank you! Enjoy the book.";
+        return msg;
     }
 
     public String returnABook(int bookId) {
         String msg = "Thank you for returning the book.";
         try {
-            catalog.returnItem(ItemType.BOOK, bookId);
+            mCatalog.returnItem(ItemType.BOOK, bookId);
             return msg;
         } catch (NotValidItemToReturnException e) {
             msg = e.getMessage();
@@ -88,17 +92,39 @@ public class Biblioteca {
     }
 
     public String showAvailableMoviesWithId() {
-        return Util.formatMovieListWithTitleAndId(catalog.listAllAvailable(ItemType.MOVIE));
+        return Util.formatMovieListWithTitleAndId(mCatalog.listAllAvailable(ItemType.MOVIE));
     }
 
     public String chekoutAMovie(int movieId) {
-        String msg = "Thank you! Enjoy the movie.";
+        String msg = "Sorry, that movie is not available.";
+        if (mCatalog.checkoutItem(ItemType.MOVIE, movieId))
+            msg = "Thank you! Enjoy the movie.";
+        return msg;
+    }
+
+    public boolean userLogin(String libraryNumber, String password) throws InvalidLibraryNumberException {
+        boolean successfulLogin = false;
+
+        User user = mLibraryUsers.findUserById(libraryNumber);
+        if(user != null) {
+            if (mLibraryUsers.correctPassword(libraryNumber, password)) {
+                mUserLoggedIn = user;
+                successfulLogin = true;
+            }
+        }
+        return successfulLogin;
+    }
+
+    public User returnUserLoggedIn() {
+        return this.mUserLoggedIn;
+    }
+
+    public static boolean validLibraryNumberFormat(String libraryNumber) {
         try {
-            catalog.checkoutItem(ItemType.MOVIE, movieId);
-            return msg;
-        } catch (ItemUnavailableException e) {
-            msg = e.getMessage();
-            return msg;
+            RegisteredUsers.validLibraryNumberFormat(libraryNumber);
+            return true;
+        } catch (InvalidLibraryNumberException e) {
+            return false;
         }
     }
 }

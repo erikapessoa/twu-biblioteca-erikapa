@@ -2,6 +2,8 @@ package com.twu.biblioteca;
 
 import com.twu.biblioteca.controller.Biblioteca;
 import com.twu.biblioteca.dao.Catalog;
+import com.twu.biblioteca.dao.RegisteredUsers;
+import com.twu.biblioteca.exceptions.InvalidLibraryNumberException;
 import com.twu.biblioteca.model.*;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -29,7 +31,8 @@ public class BibliotecaTest {
         //Given
         String expectedBooks = "Book 1\n";
         Catalog catalogMock = mock(Catalog.class);
-        Biblioteca bib = new Biblioteca(catalogMock);
+        RegisteredUsers users = mock(RegisteredUsers.class);
+        Biblioteca bib = new Biblioteca(catalogMock, users);
         Book book1 = mock(Book.class);
         List<Book> books = new ArrayList<>();
         books.add(book1);
@@ -47,7 +50,8 @@ public class BibliotecaTest {
         //Given
         String expectedBooks = "Book 1 | Author 1 | 2015\n";
         Catalog catalogMock = mock(Catalog.class);
-        Biblioteca bib = new Biblioteca(catalogMock);
+        RegisteredUsers users = mock(RegisteredUsers.class);
+        Biblioteca bib = new Biblioteca(catalogMock, users);
         Book book1 = mock(Book.class);
         List<Item> books = new ArrayList<>();
         books.add(book1);
@@ -67,7 +71,8 @@ public class BibliotecaTest {
         //Given
         String expectedBooks = "(1) Book 1\n";
         Catalog catalogMock = mock(Catalog.class);
-        Biblioteca bib = new Biblioteca(catalogMock);
+        RegisteredUsers users = mock(RegisteredUsers.class);
+        Biblioteca bib = new Biblioteca(catalogMock, users);
         Book book1 = mock(Book.class);
         List<Book> books = new ArrayList<>();
         books.add(book1);
@@ -83,11 +88,35 @@ public class BibliotecaTest {
     }
 
     @Test
-    public void showMainMenu() {
+    public void showMainMenuLibrarianLogeedIn() throws InvalidLibraryNumberException {
         //Given
         String expected = "(1) List of Books\n(2) Checkout a book\n(3) Return a book\n(4) List of Movies\n(5) Checkout a movie\n(q) Exit";
+        String libraryNumber = "001-0001";
+        String password = "a@23";
+        User user = new User(libraryNumber, password);
+        List<User> users = new ArrayList<>();
+        users.add(user);
+        Catalog mockedCatalog = mock(Catalog.class);
+        RegisteredUsers libraryUsers = new RegisteredUsers(users);
+        Biblioteca bib = new Biblioteca(mockedCatalog, libraryUsers);
+
         //when
-        String actual = Biblioteca.showMainMenu();
+        bib.userLogin(libraryNumber, password);
+
+        //then
+        assertEquals(expected, bib.showMainMenu());
+    }
+
+    @Test
+    public void showMainMenuUserNotLogeedIn() {
+        //Given
+        String expected = "(1) List of Books\n(4) List of Movies\n(q) Exit";
+        Catalog mockedCatalog = mock(Catalog.class);
+        RegisteredUsers mockedLibraryUsers = mock(RegisteredUsers.class);
+        Biblioteca bib = new Biblioteca(mockedCatalog, mockedLibraryUsers);
+
+        //when
+        String actual = bib.showMainMenu();
         //then
         assertEquals(expected, actual);
     }
@@ -97,7 +126,8 @@ public class BibliotecaTest {
         //Given
         String expected = "Please select a valid option!";
         Catalog catalog = mock(Catalog.class);
-        Biblioteca bib = new Biblioteca(catalog);
+        RegisteredUsers users = mock(RegisteredUsers.class);
+        Biblioteca bib = new Biblioteca(catalog, users);
         //when
         String actual = bib.chooseMenuOption("-1000");
         //then
@@ -109,7 +139,8 @@ public class BibliotecaTest {
         //Given
         String expected = "Bye";
         Catalog catalog = mock(Catalog.class);
-        Biblioteca bib = new Biblioteca(catalog);
+        RegisteredUsers users = mock(RegisteredUsers.class);
+        Biblioteca bib = new Biblioteca(catalog, users);
         //when
         String actual = bib.chooseMenuOption("q");
         //then
@@ -123,7 +154,8 @@ public class BibliotecaTest {
         books.add(new Book(1,"Book1", "Author 1", Year.now()));
         books.add(new Book(2,"Book2", "Author 2", Year.now()));
         Catalog catalog = new Catalog(books, new ArrayList<>());
-        Biblioteca bib = new Biblioteca(catalog);
+        RegisteredUsers users = mock(RegisteredUsers.class);
+        Biblioteca bib = new Biblioteca(catalog, users);
         String msgSucessfulCheckout = "Thank you! Enjoy the book.";
 
         //when
@@ -141,8 +173,9 @@ public class BibliotecaTest {
         books.add(new Book(2,"Book2", "Author 2", Year.now()));
         books.get(1).setAvailable(false);
         Catalog catalog = new Catalog(books, new ArrayList<>());
-        Biblioteca bib = new Biblioteca(catalog);
-        String msgUnsucessfullChekout = "Sorry, that book is not available";
+        RegisteredUsers users = mock(RegisteredUsers.class);
+        Biblioteca bib = new Biblioteca(catalog, users);
+        String msgUnsucessfullChekout = "Sorry, that book is not available.";
 
         //when
         String actual = bib.chekoutABook(2);
@@ -159,7 +192,8 @@ public class BibliotecaTest {
         books.add(new Book(2,"Book2", "Author 2", Year.now()));
         books.get(1).setAvailable(false);
         Catalog catalog = new Catalog(books, new ArrayList<>());
-        Biblioteca bib = new Biblioteca(catalog);
+        RegisteredUsers users = mock(RegisteredUsers.class);
+        Biblioteca bib = new Biblioteca(catalog, users);
         String msgSucessfulReturn = "Thank you for returning the book.";
 
         //when
@@ -176,18 +210,14 @@ public class BibliotecaTest {
         books.add(new Book(1,"Book1", "Author 1", Year.now()));
         books.add(new Book(2,"Book2", "Author 2", Year.now()));
         Catalog catalog = new Catalog(books, new ArrayList<>());
-        Biblioteca bib = new Biblioteca(catalog);
+        RegisteredUsers users = mock(RegisteredUsers.class);
+        Biblioteca bib = new Biblioteca(catalog, users);
         String msgUnsucessfullReturn = "That is not a valid book to return.";
 
         //when
-        String actual = bib.returnABook(2);
+        String actual = bib.returnABook(3);
         //then
         assertEquals(msgUnsucessfullReturn, actual);
-        //when
-        actual = bib.returnABook(3);
-        //then
-        assertEquals(msgUnsucessfullReturn, actual);
-
     }
 
     @Test
@@ -195,7 +225,8 @@ public class BibliotecaTest {
         //Given
         String expectedMovies = "(1) Movie 1\n";
         Catalog catalogMock = mock(Catalog.class);
-        Biblioteca bib = new Biblioteca(catalogMock);
+        RegisteredUsers users = mock(RegisteredUsers.class);
+        Biblioteca bib = new Biblioteca(catalogMock, users);
         Movie movie1 = mock(Movie.class);
         List<Movie> movies = new ArrayList<>();
         movies.add(movie1);
@@ -217,7 +248,8 @@ public class BibliotecaTest {
         movies.add(new Movie(1, "Movie 1", "Director 1", Year.now(), Rate.EIGHT));
         movies.add(new Movie(2, "Movie 2", "Director 2", Year.now(), Rate.FIVE));
         Catalog catalog = new Catalog(new ArrayList<>(), movies);
-        Biblioteca bib = new Biblioteca(catalog);
+        RegisteredUsers users = mock(RegisteredUsers.class);
+        Biblioteca bib = new Biblioteca(catalog, users);
         String msgSucessfulCheckout = "Thank you! Enjoy the movie.";
 
         //when
@@ -235,8 +267,9 @@ public class BibliotecaTest {
         movies.add(new Movie(2, "Movie 2", "Director 2", Year.now(), Rate.FIVE));
         movies.get(1).setAvailable(false);
         Catalog catalog = new Catalog(new ArrayList<>(), movies);
-        Biblioteca bib = new Biblioteca(catalog);
-        String msgUnsucessfullChekout = "Sorry, that movie is not available";
+        RegisteredUsers users = mock(RegisteredUsers.class);
+        Biblioteca bib = new Biblioteca(catalog, users);
+        String msgUnsucessfullChekout = "Sorry, that movie is not available.";
 
         //when
         String actual = bib.chekoutAMovie(2);
@@ -244,4 +277,21 @@ public class BibliotecaTest {
         //then
         assertEquals(msgUnsucessfullChekout, actual);
     }
+
+    @Test
+    public void userLogin() throws InvalidLibraryNumberException {
+        //Given
+        String libraryNumber = "001-0001";
+        String password = "a@23";
+        User user = new User(libraryNumber, password);
+        List<User> users = new ArrayList<>();
+        users.add(user);
+        Catalog mockCatalog = mock(Catalog.class);
+        RegisteredUsers libraryUsers = new RegisteredUsers(users);
+        Biblioteca bib = new Biblioteca(mockCatalog, libraryUsers);
+
+        //when-then
+        assertTrue(bib.userLogin(libraryNumber, password));
+    }
+
 }

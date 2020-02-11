@@ -33,16 +33,23 @@ public class Catalog {
             return listAllAvailableMovies();
     }
 
-    public void checkoutItem(ItemType type, int itemId) throws ItemUnavailableException {
+    public boolean checkoutItem(ItemType type, int itemId) {
+        boolean checkoutSuccessful = false;
         if(type.equals(ItemType.BOOK))
-            checkoutBook(itemId);
+            checkoutSuccessful = checkoutBook(itemId);
         else
-            checkoutMovie(itemId);
+           checkoutSuccessful = checkoutMovie(itemId);
+
+        return checkoutSuccessful;
     }
 
-    public void returnItem(ItemType type, int itemId) throws NotValidItemToReturnException {
+    public boolean returnItem(ItemType type, int itemId) throws NotValidItemToReturnException {
+        boolean returnSuccessful = false;
+
         if(type.equals(ItemType.BOOK))
-            returnBook(itemId);
+            returnSuccessful =  returnBook(itemId);
+
+        return returnSuccessful;
     }
 
     private List<Book> listAllBooks() {
@@ -55,28 +62,27 @@ public class Catalog {
         return availableBooks;
     }
 
-    private void checkoutBook(int bookId) throws BookUnavailableException {
-        try {
-            Book choosedBook = findBookById(bookId);
-            if(choosedBook.isAvailable())
-                lockBook(bookId);
-            else
-                throw new BookUnavailableException();
-        } catch (IllegalArgumentException e) {
-            throw new BookUnavailableException();
+    private boolean checkoutBook(int bookId) {
+        boolean checkoutSuceesful = false;
+        Book choosedBook = findBookById(bookId);
+        if(choosedBook.isAvailable()) {
+            lockBook(bookId);
+            checkoutSuceesful = true;
         }
+        return checkoutSuceesful;
     }
 
-    private void returnBook(int bookId) throws NotValidBookToReturnException {
-        try {
-            Book choosedBook = findBookById(bookId);
-            if(!choosedBook.isAvailable())
+    private boolean returnBook(int bookId) throws NotValidBookToReturnException {
+        boolean returnSucessfull = false;
+        Book choosedBook = findBookById(bookId);
+        if(choosedBook != null) {
+            if (!choosedBook.isAvailable()) {
                 unlockBook(bookId);
-            else
-                throw new NotValidBookToReturnException();
-        } catch (IllegalArgumentException e) {
+                returnSucessfull = true;
+            }
+            return returnSucessfull;
+        } else
             throw new NotValidBookToReturnException();
-        }
     }
 
     private Book findBookById(int bookId) {
@@ -84,7 +90,7 @@ public class Catalog {
             if (book.getBookId().equals(bookId))
                 return book;
         }
-        throw new IllegalArgumentException();
+        return null;
     }
 
     private void lockBook(int bookId) {
@@ -115,16 +121,15 @@ public class Catalog {
         return availableMovies;
     }
 
-    private void checkoutMovie(int movieId) throws MovieUnavailableException {
-        try {
-            Movie choosedMovie = findMovieById(movieId);
-            if(choosedMovie.isAvailable())
-                lockMovie(movieId);
-            else
-                throw new MovieUnavailableException();
-        } catch (IllegalArgumentException e) {
-            throw new MovieUnavailableException();
+    private boolean checkoutMovie(int movieId) {
+        boolean checkoutSuceesful = false;
+
+        Movie choosedMovie = findMovieById(movieId);
+        if(choosedMovie.isAvailable()) {
+            lockMovie(movieId);
+            checkoutSuceesful = true;
         }
+        return checkoutSuceesful;
     }
 
     private Movie findMovieById(int movieId) {
@@ -134,7 +139,7 @@ public class Catalog {
             if (movie.getMovieId().equals(movieId))
                 return movie;
         }
-        throw new IllegalArgumentException();
+        return null;
     }
 
     private void lockMovie(int movieId) {
