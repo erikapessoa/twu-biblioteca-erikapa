@@ -108,6 +108,28 @@ public class BibliotecaTest {
     }
 
     @Test
+    public void showMainMenuCustomerLogeedIn() throws InvalidLibraryNumberException {
+        //Given
+        String libraryNumber = "001-0001";
+        String password = "a@23";
+        Customer customer = new Customer(libraryNumber, password, "Client 1", "client1@lalal.com", "55819817654");
+        List<User> users = new ArrayList<>();
+        users.add(customer);
+        Catalog mockedCatalog = mock(Catalog.class);
+        RegisteredUsers libraryUsers = new RegisteredUsers(users);
+        Biblioteca bib = new Biblioteca(mockedCatalog, libraryUsers);
+        String expected  = "Customer information: \nName: " + customer.getName() + " - Email: " +
+                customer.getEmail() + " - Phone Number: " + customer.getPhoneNumber() +
+                "\nType (q) to quit.";
+
+        //when
+        bib.userLogin(libraryNumber, password);
+
+        //then
+        assertEquals(expected, bib.showMainMenu());
+    }
+
+    @Test
     public void showMainMenuUserNotLogeedIn() {
         //Given
         String expected = "(1) List of Books\n(4) List of Movies\n(q) Exit";
@@ -124,7 +146,7 @@ public class BibliotecaTest {
     @Test
     public void chooseInvalidMenuOption() {
         //Given
-        String expected = "Please select a valid option!";
+        String expected = "Please type a valid option!";
         Catalog catalog = mock(Catalog.class);
         RegisteredUsers users = mock(RegisteredUsers.class);
         Biblioteca bib = new Biblioteca(catalog, users);
@@ -294,4 +316,39 @@ public class BibliotecaTest {
         assertTrue(bib.userLogin(libraryNumber, password));
     }
 
+    @Test
+    public void userIsLibrarian() throws InvalidLibraryNumberException {
+        String libraryNumber = "001-0001";
+        String password = "a@23";
+        User user = new Librarian(libraryNumber, password);
+        List<User> users = new ArrayList<>();
+        users.add(user);
+        Catalog mockedCatalog = mock(Catalog.class);
+        RegisteredUsers libraryUsers = new RegisteredUsers(users);
+        Biblioteca bib = new Biblioteca(mockedCatalog, libraryUsers);
+
+        //when
+        bib.userLogin(libraryNumber, password);
+
+        //then
+        assertTrue(bib.userIsLibrarian());
+    }
+
+    @Test
+    public void userIsCustomer() throws InvalidLibraryNumberException {
+        String libraryNumber = "001-0001";
+        String password = "a@23";
+        User user = new Customer(libraryNumber, password, "a", "a", "a");
+        List<User> users = new ArrayList<>();
+        users.add(user);
+        Catalog mockedCatalog = mock(Catalog.class);
+        RegisteredUsers libraryUsers = new RegisteredUsers(users);
+        Biblioteca bib = new Biblioteca(mockedCatalog, libraryUsers);
+
+        //when
+        bib.userLogin(libraryNumber, password);
+
+        //then
+        assertTrue(bib.userIsCustomer());
+    }
 }

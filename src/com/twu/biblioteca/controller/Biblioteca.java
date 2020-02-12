@@ -2,6 +2,7 @@ package com.twu.biblioteca.controller;
 
 import com.twu.biblioteca.dao.RegisteredUsers;
 import com.twu.biblioteca.exceptions.*;
+import com.twu.biblioteca.model.Customer;
 import com.twu.biblioteca.model.ItemType;
 import com.twu.biblioteca.model.User;
 import com.twu.biblioteca.util.Util;
@@ -41,8 +42,13 @@ public class Biblioteca {
         if (returnUserLoggedIn() != null) {
             if (RegisteredUsers.isLibrarian(returnUserLoggedIn()))
                 return "(1) List of Books\n(2) Checkout a book\n(3) Return a book\n(4) List of Movies\n(5) Checkout a movie\n(q) Exit";
+            else if (RegisteredUsers.isCustumer(returnUserLoggedIn())) {
+                Customer customer = (Customer) returnUserLoggedIn();
+                return "Customer information: \nName: " + customer.getName() + " - Email: " +
+                        customer.getEmail() + " - Phone Number: " + customer.getPhoneNumber() +
+                        "\nType (q) to quit.";
+            }
         }
-
         return "(1) List of Books\n(4) List of Movies\n(q) Exit";
     }
 
@@ -71,8 +77,13 @@ public class Biblioteca {
                         optionResult = this.exit();
                         break;
                     default:
-                        optionResult = "Please select a valid option!";
+                        optionResult = "Please type a valid option!";
                 }
+            } else if (RegisteredUsers.isCustumer(returnUserLoggedIn())) {
+                if (userChoice.equals("q"))
+                        optionResult = this.exit();
+                else
+                    optionResult = "Please type q to quit!";
             }
         } else {
             switch (userChoice) {
@@ -86,7 +97,7 @@ public class Biblioteca {
                     optionResult = this.exit();
                     break;
                 default:
-                    optionResult = "Please select a valid option!";
+                    optionResult = "Please type a valid option!";
             }
         }
 
@@ -155,5 +166,14 @@ public class Biblioteca {
             librarian = true;
 
         return librarian;
+    }
+
+    public boolean userIsCustomer() {
+        boolean customer = false;
+
+        if(returnUserLoggedIn() != null && RegisteredUsers.isCustumer(returnUserLoggedIn()))
+            customer = true;
+
+        return customer;
     }
 }

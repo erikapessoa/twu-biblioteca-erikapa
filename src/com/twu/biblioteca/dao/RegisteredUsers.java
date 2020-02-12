@@ -1,6 +1,7 @@
 package com.twu.biblioteca.dao;
 
 import com.twu.biblioteca.exceptions.InvalidLibraryNumberException;
+import com.twu.biblioteca.model.Customer;
 import com.twu.biblioteca.model.Librarian;
 import com.twu.biblioteca.model.User;
 import com.twu.biblioteca.util.Util;
@@ -47,6 +48,15 @@ public class RegisteredUsers {
             librarian = true;
 
         return librarian;
+    }
+
+    public static boolean isCustumer(User user) {
+        boolean customer = false;
+
+        if ((user instanceof Customer))
+            customer = true;
+
+        return customer;
     }
 
 }

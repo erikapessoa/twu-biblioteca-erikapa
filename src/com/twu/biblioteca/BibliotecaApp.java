@@ -24,11 +24,14 @@ public class BibliotecaApp {
         System.out.println("BIBLIOTECA BANGALORE");
         System.out.println(Biblioteca.welcomeMessage());
         messageLogin();
+        String option = "INVALID";
 
-        try {
-            tryToLogin(bibApp);
-        } catch (InvalidLibraryNumberException e) {
-            System.out.println("This is not a valid library number!");
+        while (!(option.equals("OK") || option.equals("GUEST"))) {
+            try {
+                option = tryToLogin(bibApp);
+            } catch (InvalidLibraryNumberException e) {
+                System.out.println("This is not a valid library number!");
+            }
         }
 
         System.out.println(bibApp.showMainMenu());
@@ -61,7 +64,6 @@ public class BibliotecaApp {
                         System.out.println("\n");
                 }
             }
-            System.out.println("Choose an option: \n");
             System.out.println(bibApp.showMainMenu());
             scan = new Scanner(System.in);
             menuOption = scan.next();
@@ -86,9 +88,10 @@ public class BibliotecaApp {
         }
          else if (libraryNumber.equals("GUEST")){
             option = libraryNumber;
-        } else
+        } else {
+            System.out.println("This is not a valid option! Please, type your library number or type GUEST:");
             option = "INVALID";
-
+        }
         return option;
     }
 
@@ -113,9 +116,9 @@ public class BibliotecaApp {
         List<User> users = new ArrayList<>();
         users.add(new Librarian("001-0001", "1abcdef1"));
         users.add(new Librarian("001-0002", "2abcdef2"));
-        users.add(new User("001-0003", "3abcdef3"));
-        users.add(new User("001-0004", "4abcdef4"));
-        users.add(new User("001-0005", "5abcdef5"));
+        users.add(new Customer("001-0003", "3abcdef3", "Customer One", "customer1@gmail.com", "123123123"));
+        users.add(new Customer("001-0004", "4abcdef4", "Customer Two", "customer2@gmail.com", "213213213"));
+        users.add(new Customer("001-0005", "5abcdef5", "Customer Three", "customer3@gmail.com", "321321321"));
         return users;
     }
 }
