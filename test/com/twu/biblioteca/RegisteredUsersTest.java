@@ -24,8 +24,6 @@ public class RegisteredUsersTest {
         RegisteredUsers regUsers = new RegisteredUsers(users);
 
         assertEquals(user1, regUsers.findUserById(libraryNumber));
-        libraryNumber = "0000-00000";
-        assertNull(regUsers.findUserById(libraryNumber));
     }
 
     @Test
@@ -42,7 +40,6 @@ public class RegisteredUsersTest {
 
         //when-then
         assertTrue(regUsers.correctPassword(libraryNumber, password));
-
     }
 
     @Test
@@ -59,7 +56,5 @@ public class RegisteredUsersTest {
         String libraryNumber = "001-001a";
 
         RegisteredUsers.validLibraryNumberFormat(libraryNumber);
-
     }
-
 }

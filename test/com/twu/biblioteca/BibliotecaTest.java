@@ -93,7 +93,7 @@ public class BibliotecaTest {
         String expected = "(1) List of Books\n(2) Checkout a book\n(3) Return a book\n(4) List of Movies\n(5) Checkout a movie\n(q) Exit";
         String libraryNumber = "001-0001";
         String password = "a@23";
-        User user = new User(libraryNumber, password);
+        User user = new Librarian(libraryNumber, password);
         List<User> users = new ArrayList<>();
         users.add(user);
         Catalog mockedCatalog = mock(Catalog.class);

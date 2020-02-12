@@ -65,9 +65,11 @@ public class Catalog {
     private boolean checkoutBook(int bookId) {
         boolean checkoutSuceesful = false;
         Book choosedBook = findBookById(bookId);
-        if(choosedBook.isAvailable()) {
-            lockBook(bookId);
-            checkoutSuceesful = true;
+        if(choosedBook != null) {
+            if (choosedBook.isAvailable()) {
+                lockBook(bookId);
+                checkoutSuceesful = true;
+            }
         }
         return checkoutSuceesful;
     }
@@ -125,10 +127,13 @@ public class Catalog {
         boolean checkoutSuceesful = false;
 
         Movie choosedMovie = findMovieById(movieId);
-        if(choosedMovie.isAvailable()) {
-            lockMovie(movieId);
-            checkoutSuceesful = true;
+        if(choosedMovie != null) {
+            if (choosedMovie.isAvailable()) {
+                lockMovie(movieId);
+                checkoutSuceesful = true;
+            }
         }
+
         return checkoutSuceesful;
     }
 

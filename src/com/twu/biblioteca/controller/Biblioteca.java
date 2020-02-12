@@ -38,36 +38,56 @@ public class Biblioteca {
     }
 
     public String showMainMenu() {
-        if (returnUserLoggedIn() !=null)
-            return "(1) List of Books\n(2) Checkout a book\n(3) Return a book\n(4) List of Movies\n(5) Checkout a movie\n(q) Exit";
-        else
-            return "(1) List of Books\n(4) List of Movies\n(q) Exit";
+        if (returnUserLoggedIn() != null) {
+            if (RegisteredUsers.isLibrarian(returnUserLoggedIn()))
+                return "(1) List of Books\n(2) Checkout a book\n(3) Return a book\n(4) List of Movies\n(5) Checkout a movie\n(q) Exit";
+        }
+
+        return "(1) List of Books\n(4) List of Movies\n(q) Exit";
     }
 
     public String chooseMenuOption(String userChoice) {
-        String optionResult;
+        String optionResult = "Please select a valid option!";
 
-        switch (userChoice) {
-            case "1":
-                optionResult = this.showAvailableBooksWithId();
-                break;
-            case "2":
-                optionResult = "Write the id from the book you like to checkout: ";
-                break;
-            case "3":
-                optionResult = "Write the id from the book you like to return: ";
-                break;
-            case "4":
-                optionResult = this.showAvailableMoviesWithId();
-                break;
-            case "5":
-                optionResult = "Write the id from the movie you like to checkout: ";
-                break;
-            case "q":
-                optionResult = this.exit();
-                break;
-            default:
-                optionResult = "Please select a valid option!";
+        if (returnUserLoggedIn() != null) {
+            if (RegisteredUsers.isLibrarian(returnUserLoggedIn())) {
+                switch (userChoice) {
+                    case "1":
+                        optionResult = this.showAvailableBooksWithId();
+                        break;
+                    case "2":
+                        optionResult = "Write the id from the book you like to checkout: ";
+                        break;
+                    case "3":
+                        optionResult = "Write the id from the book you like to return: ";
+                        break;
+                    case "4":
+                        optionResult = this.showAvailableMoviesWithId();
+                        break;
+                    case "5":
+                        optionResult = "Write the id from the movie you like to checkout: ";
+                        break;
+                    case "q":
+                        optionResult = this.exit();
+                        break;
+                    default:
+                        optionResult = "Please select a valid option!";
+                }
+            }
+        } else {
+            switch (userChoice) {
+                case "1":
+                    optionResult = this.showAvailableBooksWithId();
+                    break;
+                case "4":
+                    optionResult = this.showAvailableMoviesWithId();
+                    break;
+                case "q":
+                    optionResult = this.exit();
+                    break;
+                default:
+                    optionResult = "Please select a valid option!";
+            }
         }
 
         return  optionResult;
@@ -126,5 +146,14 @@ public class Biblioteca {
         } catch (InvalidLibraryNumberException e) {
             return false;
         }
+    }
+
+    public boolean userIsLibrarian() {
+        boolean librarian = false;
+
+        if(returnUserLoggedIn() != null && RegisteredUsers.isLibrarian(returnUserLoggedIn()))
+            librarian = true;
+
+        return librarian;
     }
 }

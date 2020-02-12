@@ -3,6 +3,7 @@ package com.twu.biblioteca;
 import com.twu.biblioteca.controller.Biblioteca;
 import com.twu.biblioteca.dao.Catalog;
 import com.twu.biblioteca.dao.RegisteredUsers;
+import com.twu.biblioteca.exceptions.InvalidLibraryNumberException;
 import com.twu.biblioteca.model.*;
 
 import java.time.Year;
@@ -24,8 +25,11 @@ public class BibliotecaApp {
         System.out.println(Biblioteca.welcomeMessage());
         messageLogin();
 
-
-
+        try {
+            tryToLogin(bibApp);
+        } catch (InvalidLibraryNumberException e) {
+            System.out.println("This is not a valid library number!");
+        }
 
         System.out.println(bibApp.showMainMenu());
 
@@ -36,24 +40,26 @@ public class BibliotecaApp {
         while (!menuOption.equals("q")) {
             System.out.println(bibApp.chooseMenuOption(menuOption));
 
-            switch (menuOption) {
-                case "2":
-                    scan = new Scanner(System.in);
-                    itemId = scan.next();
-                    System.out.println(bibApp.chekoutABook(Integer.parseInt(itemId)));
-                    break;
-                case "3":
-                    scan = new Scanner(System.in);
-                    itemId = scan.next();
-                    System.out.println(bibApp.returnABook(Integer.parseInt(itemId)));
-                    break;
-                case "5":
-                    scan = new Scanner(System.in);
-                    itemId = scan.next();
-                    System.out.println(bibApp.chekoutAMovie(Integer.parseInt(itemId)));
-                    break;
-                default:
-                     System.out.println("\n");
+            if(bibApp.userIsLibrarian()) {
+                switch (menuOption) {
+                    case "2":
+                        scan = new Scanner(System.in);
+                        itemId = scan.next();
+                        System.out.println(bibApp.chekoutABook(Integer.parseInt(itemId)));
+                        break;
+                    case "3":
+                        scan = new Scanner(System.in);
+                        itemId = scan.next();
+                        System.out.println(bibApp.returnABook(Integer.parseInt(itemId)));
+                        break;
+                    case "5":
+                        scan = new Scanner(System.in);
+                        itemId = scan.next();
+                        System.out.println(bibApp.chekoutAMovie(Integer.parseInt(itemId)));
+                        break;
+                    default:
+                        System.out.println("\n");
+                }
             }
             System.out.println("Choose an option: \n");
             System.out.println(bibApp.showMainMenu());
@@ -66,27 +72,25 @@ public class BibliotecaApp {
         System.out.println("If you wanna login type your library number; if not, type GUEST:");
     }
 
-    /*
-    private String tryToLogin(Biblioteca bib) {
+
+    private static String tryToLogin(Biblioteca bib) throws InvalidLibraryNumberException {
+        String option;
         Scanner scan = new Scanner(System.in);
-        String option = scan.next();
-        if (!option.equals("GUEST") && RegisteredUsers.validLibraryNumberFormat(option)) {
-            boolean exist = bib.registeredUser(option);
-            if(exist) {
-                scan = new Scanner(System.in);
-                String pass = scan.next();
-                bib.userLogin(option, pass);
-                option = "OK";
-            }
-        } else if (option.equals("GUEST")){
-            return option;
+        String libraryNumber = scan.next();
+        if (!libraryNumber.equals("GUEST") && Biblioteca.validLibraryNumberFormat(libraryNumber)) {
+            System.out.println("Type your password:");
+            scan = new Scanner(System.in);
+            String pass = scan.next();
+            bib.userLogin(libraryNumber, pass);
+            option = "OK";
+        }
+         else if (libraryNumber.equals("GUEST")){
+            option = libraryNumber;
         } else
             option = "INVALID";
 
         return option;
     }
-
-     */
 
     private static List<Movie> getMovies() {
         List<Movie> movies = new ArrayList<>();
@@ -107,11 +111,11 @@ public class BibliotecaApp {
 
     private static List<User> getUsers() {
         List<User> users = new ArrayList<>();
-        users.add(new User("000-00001", "1abcdef1"));
-        users.add(new User("000-00002", "2abcdef2"));
-        users.add(new User("000-00003", "3abcdef3"));
-        users.add(new User("000-00004", "4abcdef4"));
-        users.add(new User("000-00005", "5abcdef5"));
+        users.add(new Librarian("001-0001", "1abcdef1"));
+        users.add(new Librarian("001-0002", "2abcdef2"));
+        users.add(new User("001-0003", "3abcdef3"));
+        users.add(new User("001-0004", "4abcdef4"));
+        users.add(new User("001-0005", "5abcdef5"));
         return users;
     }
 }
